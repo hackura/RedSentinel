@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ tool_name }} Security Report</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 40px;
+            color: #222;
+        }
+
+        h1 {
+            color: #b00000;
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #b00000;
+            margin-top: 50px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 5px;
+        }
+
+        h3 {
+            margin-top: 25px;
+            color: #333;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        ul {
+            margin-left: 20px;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        .cover {
+            text-align: center;
+            margin-top: 180px;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 10px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ================= COVER PAGE ================= -->
+<div class="cover">
+    <h1>{{ tool_name }}</h1>
+    <p><strong>Security Assessment Report</strong></p>
+
+    <p>
+        Target: <strong>{{ target }}</strong><br>
+        Generated: {{ generated_on }}
+    </p>
+
+    <p>{{ project }}</p>
+
+    <p style="margin-top: 50px; font-size: 12px;">
+        {{ disclaimer }}
+    </p>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ================= EXECUTIVE SUMMARY ================= -->
+<h2>Executive Summary</h2>
+
+<p>
+This report presents the findings of a simulated security assessment conducted
+against the specified target. The objective was to identify exposed services,
+observable technologies, and common misconfigurations using passive and
+non-intrusive techniques.
+</p>
+
+<p>
+No exploitation or intrusive testing was performed. All findings should be
+validated before remediation.
+</p>
+
+<div class="page-break"></div>
+
+<!-- ================= FINDINGS ================= -->
+<h2>Technical Findings</h2>
+
+{% if results %}
+    {% for section in results %}
+        <h3>{{ section }}</h3>
+
+        {% if results[section] %}
+            <ul>
+                {% for finding in results[section] %}
+                    <li>{{ finding }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No findings reported.</p>
+        {% endif %}
+    {% endfor %}
+{% else %}
+    <p>No results were generated during the simulation.</p>
+{% endif %}
+
+<footer>
+    {{ tool_name }} | Hackura Project | Educational Use Only
+</footer>
+
+</body>
+</html>
+

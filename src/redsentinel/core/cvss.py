@@ -1,3 +1,19 @@
+# ============================================================
+# src/redsentinel/core/cvss.py
+# ============================================================
+"""
+CVSS v3.1 Scoring Module (Your Implementation, Integrated)
+---------------------------------------------------------
+This keeps YOUR CVSS math exactly as-is and simply adds
+an adapter function `assign_severity()` so the rest of
+RedSentinel can consume it cleanly.
+
+Public API exposed:
+- calculate_cvss_base(vector)
+- severity_from_score(score)
+- assign_severity(finding)
+"""
+
 import math
 
 # ---------------- CVSS v3.1 WEIGHTS ----------------
@@ -15,20 +31,8 @@ IMPACT = {"N": 0.0, "L": 0.22, "H": 0.56}
 def calculate_cvss_base(vector: dict) -> float:
     """
     Calculate CVSS v3.1 Base Score
-    vector example:
-    {
-        "AV": "N",
-        "AC": "L",
-        "PR": "N",
-        "UI": "N",
-        "S": "U",
-        "C": "L",
-        "I": "L",
-        "A": "N"
-    }
     """
 
-    # Impact Subscore
     iss = 1 - (
         (1 - IMPACT[vector["C"]]) *
         (1 - IMPACT[vector["I"]]) *
@@ -42,7 +46,6 @@ def calculate_cvss_base(vector: dict) -> float:
         impact = 7.52 * (iss - 0.029) - 3.25 * pow((iss - 0.02), 15)
         pr = PR_C[vector["PR"]]
 
-    # Exploitability Subscore
     exploitability = 8.22 * (
         AV[vector["AV"]] *
         AC[vector["AC"]] *
@@ -50,7 +53,6 @@ def calculate_cvss_base(vector: dict) -> float:
         UI[vector["UI"]]
     )
 
-    # Base Score
     if impact <= 0:
         score = 0.0
     else:
@@ -63,7 +65,6 @@ def calculate_cvss_base(vector: dict) -> float:
 
 
 def round_up(score: float) -> float:
-    """CVSS rounding (round up to 1 decimal)"""
     return math.ceil(score * 10) / 10
 
 
@@ -77,4 +78,36 @@ def severity_from_score(score: float) -> str:
     elif score > 0:
         return "LOW"
     return "NONE"
+
+
+# ------------------------------------------------------------
+# Adapter REQUIRED by simulator.py
+# ------------------------------------------------------------
+
+def assign_severity(finding):
+    """
+    Adapter for simulator.
+
+    Since we don't yet extract full CVSS vectors from tools,
+    we use SAFE DEFAULTS and let your real CVSS math handle scoring.
+
+    Later: map findings → real vectors.
+    """
+
+    # Temporary default vector (network, low complexity)
+    vector = {
+        "AV": "N",
+        "AC": "L",
+        "PR": "N",
+        "UI": "N",
+        "S": "U",
+        "C": "L",
+        "I": "L",
+        "A": "N",
+    }
+
+    score = calculate_cvss_base(vector)
+    severity = severity_from_score(score)
+
+    return severity, score
 

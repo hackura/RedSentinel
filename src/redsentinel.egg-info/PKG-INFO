@@ -1,0 +1,187 @@
+Metadata-Version: 2.4
+Name: redsentinel
+Version: 0.1.0
+Summary: AI-assisted red/purple team simulation & analysis framework
+Author-email: Karl Seyram <karlseyram2@gmail.com>
+License-Expression: MIT
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: jinja2
+Requires-Dist: matplotlib
+Requires-Dist: rich
+Requires-Dist: pytest
+Dynamic: license-file
+
+# RedSentinel 🟥
+
+AI‑Assisted Red / Purple Team Simulation & Analysis Framework
+
+> **Educational & research use only** — RedSentinel supports both **offline analysis** and **controlled live testing**, depending on the selected mode.
+
+---
+
+## 🔍 What RedSentinel Is
+
+RedSentinel is a **modular security analysis and attack‑path simulation tool** designed to help:
+
+* Security students
+* SOC analysts
+* Blue / Purple teams
+
+understand how vulnerabilities, misconfigurations, and logs can be **correlated into realistic attack paths**.
+
+It supports **multiple operational modes**, each doing a *different thing*, via an interactive menu or direct CLI usage.
+
+---
+
+## ⚙️ Core Capabilities
+
+### 1️⃣ Log & Scan Analysis (Offline)
+
+* Parses existing scan outputs (e.g. Nikto)
+* Analyzes logs and findings
+* Assigns CVSS‑style risk scoring
+* Builds attack paths **without executing exploits**
+
+### 2️⃣ Attack Plan Generation (Simulation)
+
+* Generates **theoretical exploit chains**
+* Maps attacker steps, prerequisites, and impact
+* No payloads executed
+* Safe for academic and defensive environments
+
+### 3️⃣ Live Testing (Controlled)
+
+* Optional **live analysis mode**
+* Target‑based testing when explicitly selected
+* Intended for labs, owned systems, or permission‑based targets only
+
+⚠️ **Nothing runs live unless the user explicitly chooses it**
+
+### 4️⃣ Exploit‑Driven Reporting
+
+* Exploit logic is used to:
+
+  * Explain feasibility
+  * Demonstrate impact
+* **Only this mode generates PDF reports**
+
+### 5️⃣ Reporting Engine
+
+* HTML reports (default)
+* PDF reports (exploit mode only)
+* Risk heatmaps & summaries
+
+---
+
+## Interactive Menu
+
+RedSentinel includes an interactive menu that lets you choose exactly what you want to do:
+
+* Log / scan analysis
+* Attack plan simulation
+* Live testing (explicit)
+* Exploit analysis + PDF reporting
+
+Each menu option triggers a **different execution path** internally.
+
+---
+
+##  Example CLI Usage
+
+```bash
+python3 -m redsentinel.cli menu
+```
+
+Depending on the selected mode, this may:
+
+* Analyze existing scan/log inputs
+* Simulate an attack plan
+* Perform controlled live checks
+
+---
+
+## 📂 Project Structure
+
+```
+redsentinel
+├── cli.py                # CLI entry point
+├── menu.py               # Interactive menu system
+├── core/
+│   ├── analyzer.py       # Log & scan analysis
+│   ├── planner.py        # Attack path planning
+│   ├── exploit_engine.py # Exploit reasoning
+│   ├── advisor.py        # Mitigation guidance
+│   ├── cvss.py           # Risk scoring
+│   ├── reporter.py       # Report orchestration
+│   ├── html_reporter.py  # HTML reports
+│   ├── pdf_reporter.py   # PDF reports (exploit mode)
+│   ├── risk.py
+│   ├── risk_heatmap.py
+│   ├── simulator.py
+│   └── state.py
+├── assets/
+│   └── risk_heatmap.png
+├── samples/
+│   └── nikto.txt
+├── templates/
+│   └── report.html
+├── test-lab/
+│   ├── inputs
+│   ├── outputs
+│   └── reports
+└── reports/
+```
+
+---
+
+## 🧪 Testing
+
+Pytest is used to validate:
+
+* Analyzer logic
+* Planner correctness
+* Risk scoring consistency
+
+```bash
+pytest
+```
+
+---
+
+##  Installation (Editable / Dev)
+
+```bash
+git clone https://github.com/hackura/RedSentinel.git
+cd RedSentinel
+pip install -r requirements.txt
+pip install -e .
+```
+
+---
+
+##  Disclaimer
+
+RedSentinel is intended for:
+
+* Education
+* Research
+* Authorized testing only
+
+You are responsible for ensuring you have **explicit permission** before performing any live testing.
+
+---
+
+## 🧠 Roadmap
+
+* BlueSentinel (defensive correlation)
+* SIEM‑style log ingestion
+* MITRE ATT&CK mapping
+* Web UI
+* Plugin‑based scanners
+
+---
+
+Built with 🟥 by **Hackura / Karl Seyram**
+

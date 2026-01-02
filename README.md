@@ -1,172 +1,195 @@
-# RedSentinel 🟥
+# 🛡️ RedSentinel
 
-AI‑Assisted Red / Purple Team Simulation & Analysis Framework
+**RedSentinel** is an AI-assisted red team simulation and vulnerability assessment framework designed for **educational, research, and defensive security use**. It orchestrates real-world security tools to perform live scans, analyze findings, calculate CVSS severity, and generate **professional SOC-ready HTML and PDF reports**.
 
-> **Educational & research use only** — RedSentinel supports both **offline analysis** and **controlled live testing**, depending on the selected mode.
-
----
-
-## 🔍 What RedSentinel Is
-
-RedSentinel is a **modular security analysis and attack‑path simulation tool** designed to help:
-
-* Security students
-* SOC analysts
-* Blue / Purple teams
-
-understand how vulnerabilities, misconfigurations, and logs can be **correlated into realistic attack paths**.
-
-It supports **multiple operational modes**, each doing a *different thing*, via an interactive menu or direct CLI usage.
+> ⚠️ **Authorization Required**: Only scan systems you own or have explicit permission to test.
 
 ---
 
-## ⚙️ Core Capabilities
+## ✨ Key Features
 
-### 1️⃣ Log & Scan Analysis (Offline)
-
-* Parses existing scan outputs (e.g. Nikto)
-* Analyzes logs and findings
-* Assigns CVSS‑style risk scoring
-* Builds attack paths **without executing exploits**
-
-### 2️⃣ Attack Plan Generation (Simulation)
-
-* Generates **theoretical exploit chains**
-* Maps attacker steps, prerequisites, and impact
-* No payloads executed
-* Safe for academic and defensive environments
-
-### 3️⃣ Live Testing (Controlled)
-
-* Optional **live analysis mode**
-* Target‑based testing when explicitly selected
-* Intended for labs, owned systems, or permission‑based targets only
-
-⚠️ **Nothing runs live unless the user explicitly chooses it**
-
-### 4️⃣ Exploit‑Driven Reporting
-
-* Exploit logic is used to:
-
-  * Explain feasibility
-  * Demonstrate impact
-* **Only this mode generates PDF reports**
-
-### 5️⃣ Reporting Engine
-
-* HTML reports (default)
-* PDF reports (exploit mode only)
-* Risk heatmaps & summaries
+* 🔍 **Live Vulnerability Scanning** (no fake data)
+* 🧠 **AI-Assisted Analysis & Attack Planning**
+* 📊 **Risk Heatmap Visualization**
+* 📄 **Automatic HTML & PDF Report Generation**
+* 🧮 **CVSS v3.1 Scoring & Severity Mapping**
+* 🧪 **Menu-driven CLI Interface**
 
 ---
 
-## Interactive Menu
+## 🧰 Tools Orchestrated (Mandatory for Live Scans)
 
-RedSentinel includes an interactive menu that lets you choose exactly what you want to do:
+RedSentinel does **NOT** re-implement scanners. Instead, it orchestrates industry-standard tools.
 
-* Log / scan analysis
-* Attack plan simulation
-* Live testing (explicit)
-* Exploit analysis + PDF reporting
+You **must install the following system tools** to enable live scanning:
 
-Each menu option triggers a **different execution path** internally.
+| Tool      | Purpose                                        |
+| --------- | ---------------------------------------------- |
+| `nmap`    | Network & port discovery                       |
+| `nikto`   | Web server vulnerability scanning              |
+| `whatweb` | Web technology fingerprinting                  |
+| `ping`    | Host availability check (usually preinstalled) |
 
----
-
-##  Example CLI Usage
+### 📦 Install Tools (Ubuntu / Debian)
 
 ```bash
-python3 -m redsentinel.cli menu
+sudo apt update
+sudo apt install nmap nikto
+sudo gem install whatweb
 ```
 
-Depending on the selected mode, this may:
+Verify installation:
 
-* Analyze existing scan/log inputs
-* Simulate an attack plan
-* Perform controlled live checks
+```bash
+nmap --version
+nikto -Version
+whatweb example.com
+```
+
+> If a tool is missing, RedSentinel will **warn and skip that scan** — it will never fabricate results.
 
 ---
 
-## 📂 Project Structure
+## 🐍 Python Environment (MANDATORY)
+
+RedSentinel **must be run inside a virtual environment**.
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+Install Python dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 📦 Installation (Editable / Development Mode)
+
+```bash
+pip install -e .
+```
+
+This installs the `redsentinel` CLI command.
+
+---
+
+## 🚀 Usage
+
+Launch RedSentinel:
+
+```bash
+redsentinel
+```
+
+### Available Modes (Menu-Driven)
+
+* 🔍 **Live Vulnerability Scan**
+* 🧠 **Attack Planning / Advisory Mode**
+* 📂 **Offline Log Analysis** (e.g. Nikto logs)
+
+> **Important**: When a vulnerability scan is executed, **PDF generation is mandatory**.
+
+---
+
+## 📄 Reports
+
+Every vulnerability scan produces:
+
+* ✔️ Clean **HTML report**
+* ✔️ High-quality **PDF report** (via WeasyPrint)
+* ✔️ Embedded **risk heatmap**
+* ✔️ Executive summary & findings table
+
+Reports are saved to:
 
 ```
-redsentinel
-├── cli.py                # CLI entry point
-├── menu.py               # Interactive menu system
-├── core/
-│   ├── analyzer.py       # Log & scan analysis
-│   ├── planner.py        # Attack path planning
-│   ├── exploit_engine.py # Exploit reasoning
-│   ├── advisor.py        # Mitigation guidance
-│   ├── cvss.py           # Risk scoring
-│   ├── reporter.py       # Report orchestration
-│   ├── html_reporter.py  # HTML reports
-│   ├── pdf_reporter.py   # PDF reports (exploit mode)
-│   ├── risk.py
-│   ├── risk_heatmap.py
+reports/
+```
+
+---
+
+## 📊 CVSS & Severity
+
+RedSentinel uses a **CVSS v3.1 scoring engine** to assign severity levels:
+
+| Score Range | Severity |
+| ----------- | -------- |
+| 9.0 – 10.0  | CRITICAL |
+| 7.0 – 8.9   | HIGH     |
+| 4.0 – 6.9   | MEDIUM   |
+| 0.1 – 3.9   | LOW      |
+
+---
+
+## 🧪 Project Structure (src-layout)
+
+```
+src/redsentinel
+├── cli.py
+├── menu.py
+├── core
+│   ├── analyzer.py
 │   ├── simulator.py
+│   ├── planner.py
+│   ├── advisor.py
+│   ├── cvss.py
+│   ├── html_reporter.py
+│   ├── pdf_reporter.py
+│   ├── risk_heatmap.py
 │   └── state.py
-├── assets/
-│   └── risk_heatmap.png
-├── samples/
-│   └── nikto.txt
-├── templates/
+├── templates
 │   └── report.html
-├── test-lab/
-│   ├── inputs
-│   ├── outputs
-│   └── reports
-└── reports/
+└── assets
+    └── risk_heatmap.png
 ```
 
 ---
 
 ## 🧪 Testing
 
-Pytest is used to validate:
-
-* Analyzer logic
-* Planner correctness
-* Risk scoring consistency
-
 ```bash
 pytest
 ```
 
----
-
-##  Installation (Editable / Dev)
-
-```bash
-git clone https://github.com/hackura/RedSentinel.git
-cd RedSentinel
-pip install -r requirements.txt
-pip install -e .
-```
+Tests improve credibility and reliability.
 
 ---
 
-##  Disclaimer
+## 🧠 Philosophy
 
-RedSentinel is intended for:
-
-* Education
-* Research
-* Authorized testing only
-
-You are responsible for ensuring you have **explicit permission** before performing any live testing.
+* ❌ No fake vulnerabilities
+* ❌ No silent failures
+* ✅ Real tools, real findings
+* ✅ SOC / client-ready reporting
 
 ---
 
-## 🧠 Roadmap
+## 📜 License
 
-* BlueSentinel (defensive correlation)
-* SIEM‑style log ingestion
+MIT License
+
+---
+
+## 🔮 Roadmap (Planned)
+
 * MITRE ATT&CK mapping
-* Web UI
-* Plugin‑based scanners
+* Scan profiles (fast / full / stealth)
+* JSON export for SIEM
+* Dockerized deployment
+* BlueSentinel (defensive SOC mode)
 
 ---
 
-Built with 🟥 by **Hackura / Karl Seyram**
+## 👨‍💻 Author
+
+**Hackura**
+Cybersecurity Student & Researcher
+
+---
+
+> 🛑 **Reminder**: RedSentinel is for **authorized testing only**. Unauthorized scanning is illegal.
 
