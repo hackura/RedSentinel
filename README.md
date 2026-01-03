@@ -1,125 +1,109 @@
-<p align="center">
-  <img src="assets/redsentinel-logo.png" alt="RedSentinel Logo" width="220">
-</p>
-
-<h1 align="center">RedSentinel</h1>
+#  RedSentinel
 
 <p align="center">
-  <strong>AI-Assisted Security Assessment & Reporting Tool</strong>
+  <img src="assets/redsentinel-logo.png" width="160" />
 </p>
 
 <p align="center">
-  Educational • Defensive • Auditor-Ready
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.10%2B-blue.svg">
-  <img src="https://img.shields.io/badge/License-MIT-green.svg">
-  <img src="https://img.shields.io/badge/Platform-Linux%20%7C%20Kali%20%7C%20Termux-lightgrey.svg">
-  <img src="https://img.shields.io/badge/Status-Alpha-orange.svg">
-  <img src="https://img.shields.io/github/stars/hackura/RedSentinel?style=social">
+<strong>AI‑Assisted Defensive Security Scanning & Reporting Framework</strong><br>
+Educational • Research • Blue‑Team Focused
 </p>
 
 ---
 
-##  What is RedSentinel?
+##  Overview
 
-**RedSentinel** is an **AI-assisted security assessment tool** designed for
-**educational, defensive, and research-focused security testing**.
+**RedSentinel** is an AI‑assisted security assessment tool that orchestrates well‑known defensive scanners, normalizes their output, enriches findings with risk context, and generates **professional‑grade HTML, PDF, and JSON reports**.
 
-It performs **non-intrusive reconnaissance and analysis**, normalizes raw tool
-output, and generates **professional, plain-English security reports** suitable
-for:
+It is designed for:
 
-* SOC analysts
-* Security engineers
-* Consultants
-* Auditors
-* Executives
+* Blue teams
+* Security students
+* Researchers
+* Defensive assessments
 
->  **RedSentinel must only be used on systems you own or have explicit authorization to test.**
+🚫 **No exploitation. No payloads. No intrusion.**
+
+---
+
+##  Tool Coverage
+
+![nmap](https://img.shields.io/badge/nmap-active-blue)
+![nikto](https://img.shields.io/badge/nikto-active-blue)
+![whatweb](https://img.shields.io/badge/whatweb-active-blue)
+![httpx](https://img.shields.io/badge/httpx-active-blue)
+![sslscan](https://img.shields.io/badge/sslscan-active-blue)
+![ping](https://img.shields.io/badge/ping-active-blue)
+
+---
+
+##  CLI in Action
+
+<p align="center">
+  <img src="assets/cli.png" width="90%" />
+</p>
+
+<p align="center">
+  <img src="assets/cli_in_action.png" width="90%" />
+</p>
 
 ---
 
 ##  Key Features
 
-* Live execution of common security tools:
-
-  * `ping`, `nmap`, `whatweb`, `nikto`, `httpx`, `sslscan`
-* Accurate parsing (fixes the classic *“no findings”* issue)
-* Confidence-based filtering to reduce noise
-* CVSS scoring and CVSS v3.1 vectors
-* Executive-level risk score
-* OWASP Top 10, ISO 27001, and PCI-DSS mapping
-* AI-generated remediation roadmap (plain English)
-* HTML, PDF (WeasyPrint), and JSON reporting
-* SOC-friendly JSON export
-* Termux auto-detection
-* `--no-report` CLI flag for terminal-only scans
+* Live execution of industry‑standard scanners
+* Confidence‑weighted findings
+* CVSS‑based severity scoring
+* AI‑generated remediation roadmap
+* Compliance mapping (OWASP, ISO 27001, PCI DSS)
+* Risk heatmap visualization
+* HTML, PDF & JSON reporting
+* Termux‑aware execution
 
 ---
 
-##  Requirements
+##  Example Reports
 
-* **Python 3.10+**
-* Linux-based OS (Kali, Debian, Ubuntu, or Termux)
-* External tools installed:
+Sample reports are included in the project root:
 
-  ```bash
-  nmap whatweb nikto httpx sslscan
-  ```
-
-### System Dependencies (PDF Reports)
-
-**Debian / Kali / Ubuntu**
-
-```bash
-sudo apt install -y \
-  libcairo2 \
-  libpango-1.0-0 \
-  libpangocairo-1.0-0 \
-  libgdk-pixbuf-2.0-0 \
-  libffi-dev \
-  shared-mime-info
+```
+reports/
+├── report_example.html
+├── report_example.pdf
+└── report_example.json
 ```
 
-**Termux**
-
-```bash
-pkg install cairo pango libffi
-```
+These demonstrate RedSentinel’s reporting format and structure.
 
 ---
 
-##  Installation
+## ⚙️ Installation
+
+### Linux / macOS
 
 ```bash
-git clone https://github.com/hackura/RedSentinel.git
-cd RedSentinel
-
 python -m venv venv
 source venv/bin/activate
-
-pip install .
+pip install -r requirements.txt
 ```
 
----
+### Termux (Android)
 
-##  AI Configuration (Optional)
-
-To enable AI-generated explanations and remediation guidance, create a `.env`
-file in the project root:
-
-```env
-REDSENTINEL_AI_KEY=your_api_key_here
-REDSENTINEL_AI_URL=https://api.openai.com/v1/chat/completions
+```bash
+pkg update && pkg upgrade
+pkg install python git clang openssl libxml2 libxslt
+pkg install nmap nikto whatweb sslscan
+pip install --upgrade pip setuptools wheel
+pip install -r requirements.txt
 ```
 
->  Never commit `.env` to GitHub.
+⚠️ **Termux Notes**
+
+* PDF generation may be skipped
+* ICMP may be restricted (nmap uses `-Pn` automatically)
+* Always install tools using `pkg`, not `apt`
 
 ---
-
-##  Usage
 
 Run the interactive CLI:
 
@@ -133,88 +117,71 @@ Run a scan without generating reports:
 redsentinel --no-report
 ```
 
-All reports are saved in the `reports/` directory.
+Follow the interactive menu to run a scan and generate reports.
 
 ---
 
-##  Output Formats
+##  AI‑Assisted Reporting
 
-* **Terminal Output** – Live findings with severity and confidence
-* **HTML Report** – Executive-friendly assessment
-* **PDF Report** – Audit-ready, printable format
-* **JSON Export** – SOC and automation workflows
+RedSentinel uses AI to:
 
----
+* Summarize technical findings
+* Generate prioritized remediation steps
+* Translate raw scan data into executive‑friendly language
 
-## Contributing
-
-Contributions are **welcome** and **appreciated**.
-
-You can contribute by:
-
-* Improving parsers
-* Adding new scanning tools
-* Enhancing report templates
-* Improving AI prompts
-* Fixing bugs or improving documentation
-
-### How to contribute
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Open a pull request
-
-All contributions must remain **non-intrusive and defensive**.
-
----
-
-##  Roadmap
-
-Planned future enhancements:
-
-* MITRE ATT&CK mapping
-* Compliance scoring per framework
-* Historical scan comparison
-* Offline / local LLM support
-* Plugin architecture for tools
-* Docker support
-* CI/CD pipelines
-* Enhanced SOC integrations
-
-Ideas and feedback are welcome via issues or discussions.
-
----
-
-##  Support the Project
-
-If RedSentinel helps you learn or work better:
-
-* Star the repository
-* Donate: [https://buymeacoffee.com/hackura](BuyMeACoffee)
-* Share the project
-* Contribute code or documentation
+AI output **never performs exploitation**.
 
 ---
 
 ##  Connect
 
-* GitHub: [https://github.com/hackura](GitHub)
-* Twitter / X: [https://twitter.com/dorpe_karl](X)
-* LinkedIn: [https://linkedin.com/in/karlseyramdorpe](LinkedIn)
-
-
----
-
-##  Disclaimer
-
-RedSentinel is provided for **educational and defensive security research only**.
-The author assumes no responsibility for misuse or unauthorized testing.
+* GitHub: [https://github.com/hackura](https://github.com/hackura)
+* Twitter / X: [https://twitter.com/dorpe_karl](https://twitter.com/dorpe_karl)
+* LinkedIn: [https://linkedin.com/in/karlseyramdorpe](https://linkedin.com/in/karlseyramdorpe)
 
 ---
 
-##  Author
+## References & Citations
 
-**Karl Seyram**
-Hackura Project
+RedSentinel aligns with established security standards:
+
+* **OWASP Top 10**
+  [https://owasp.org/www-project-top-ten/](https://owasp.org/www-project-top-ten/)
+
+* **NIST SP 800‑53 / 800‑61**
+  [https://csrc.nist.gov/](https://csrc.nist.gov/)
+
+* **CVSS v3.1**
+  [https://www.first.org/cvss/](https://www.first.org/cvss/)
+
+* **MITRE ATT&CK**
+  [https://attack.mitre.org/](https://attack.mitre.org/)
+
+These frameworks guide severity scoring, compliance mapping, and reporting logic.
+
+---
+
+## Support the Project
+
+If RedSentinel helps you learn or work better:
+
+* ⭐ Star the repository
+* ☕ Donate: [https://buymeacoffee.com/hackura](https://buymeacoffee.com/hackura)
+* Share the project
+* Contribute code or documentation
+
+---
+
+## ⚠️ Disclaimer
+
+RedSentinel is intended for **authorized defensive security testing only**.
+
+You must own the target or have explicit permission before scanning.
+
+The authors are not responsible for misuse.
+
+---
+
+**RedSentinel — Hackura Project**
+Educational & Research Use Only
 

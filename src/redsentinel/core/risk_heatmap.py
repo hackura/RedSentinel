@@ -1,45 +1,53 @@
-import os
+# ============================================================
+# src/redsentinel/core/risk_heatmap.py
+# ============================================================
+
+from pathlib import Path
 import matplotlib.pyplot as plt
 
 
-def generate_risk_heatmap(findings: list, output_dir: str):
+def generate_risk_heatmap(findings: dict, output_dir: Path) -> str:
     """
-    Generate a simple risk heatmap from raw string findings
+    Generates a risk heatmap based on enriched findings.
+
+    - Saves into src/redsentinel/reports
+    - Returns filename only (HTML/PDF safe)
     """
 
     severity_count = {
+        "Critical": 0,
         "High": 0,
         "Medium": 0,
-        "Low": 0
+        "Low": 0,
     }
 
-    for f in findings:
-        if not isinstance(f, str):
-            continue
-
-        text = f.lower()
-
-        if "missing" in text or "disclosure" in text:
-            severity_count["Medium"] += 1
-        elif "open port" in text:
-            severity_count["Low"] += 1
-        else:
-            severity_count["Low"] += 1
+    # Count findings by severity
+    for tool_findings in findings.values():
+        for f in tool_findings:
+            sev = f.get("severity", "").capitalize()
+            if sev in severity_count:
+                severity_count[sev] += 1
 
     labels = list(severity_count.keys())
     values = list(severity_count.values())
+    colors = ["darkred", "red", "orange", "green"]
 
-    plt.figure()
-    plt.bar(labels, values)
-    plt.title("Risk Heatmap")
+    plt.figure(figsize=(6, 4))
+    plt.bar(labels, values, color=colors)
+    plt.title("Risk Severity Distribution")
     plt.xlabel("Severity")
-    plt.ylabel("Count")
+    plt.ylabel("Number of Findings")
 
-    os.makedirs(output_dir, exist_ok=True)
-    output_path = os.path.join(output_dir, "risk_heatmap.png")
+    for i, v in enumerate(values):
+        plt.text(i, v + 0.05, str(v), ha="center", fontsize=9)
 
-    plt.savefig(output_path)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    heatmap_file = output_dir / "risk_heatmap.png"
+
+    plt.tight_layout()
+    plt.savefig(heatmap_file, dpi=150)
     plt.close()
 
-    return output_path
+    # 🔑 RETURN ONLY FILENAME
+    return heatmap_file.name
 

@@ -11,9 +11,20 @@ body {
     color: #222;
 }
 
+.header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header img {
+    height: 80px;
+}
+
 h1 {
     color: #8b0000;
     font-size: 38px;
+    margin: 0;
 }
 
 h2 {
@@ -52,6 +63,30 @@ th {
 .sev-Medium { color: orange; }
 .sev-Low { color: green; }
 
+.cvss-bar {
+    background: #eee;
+    width: 100%;
+    height: 14px;
+    border-radius: 4px;
+}
+
+.cvss-fill {
+    height: 14px;
+    border-radius: 4px;
+}
+
+.cvss-Critical { background: darkred; }
+.cvss-High { background: red; }
+.cvss-Medium { background: orange; }
+.cvss-Low { background: green; }
+
+.summary-box {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-top: 20px;
+    background: #fafafa;
+}
+
 .page-break {
     page-break-before: always;
 }
@@ -72,6 +107,61 @@ footer {
     color: #777;
     text-align: center;
 }
+
+/* ============================================================
+   PDF SAFETY & PRINT OPTIMIZATION (WeasyPrint)
+   ============================================================ */
+
+/* Page setup */
+@page {
+    size: A4;
+    margin: 14mm;
+}
+
+/* Force tables to respect page width */
+table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+/* Force wrapping everywhere */
+th, td {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+    font-size: 11px;
+}
+
+/* Prevent ugly page splits */
+tr {
+    page-break-inside: avoid;
+}
+
+/* Long raw output handling */
+pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+/* Reduce heading size for PDF */
+@media print {
+    body {
+        font-size: 11px;
+    }
+
+    h1 { font-size: 26px; }
+    h2 { font-size: 20px; }
+    h3 { font-size: 16px; }
+
+    .header img {
+        height: 60px;
+    }
+}
+
 </style>
 </head>
 
@@ -80,7 +170,10 @@ footer {
 <div class="watermark">RedSentinel</div>
 
 <!-- ================= COVER ================= -->
-<h1>Security Assessment Report</h1>
+<div class="header">
+    <img src="../assets/redsentinel-logo.png" alt="RedSentinel Logo">
+    <h1>Security Assessment Report</h1>
+</div>
 
 <p>
 <strong>Target:</strong> {{ target }}<br>
@@ -88,7 +181,7 @@ footer {
 </p>
 
 <p>
-This report was generated using RedSentinel, an AI-assisted
+This report was generated using <strong>RedSentinel</strong>, an AI-assisted
 security assessment platform designed for defensive and
 educational use.
 </p>
@@ -101,8 +194,6 @@ educational use.
 <p>
 A security assessment was conducted to evaluate the external
 exposure and security posture of the target system.
-The assessment focused on identifying misconfigurations,
-exposed services, and weak security controls.
 </p>
 
 <p>
@@ -110,11 +201,13 @@ exposed services, and weak security controls.
 {{ executive_risk_score }} / 10
 </p>
 
-<p>
-Risk ratings above <strong>7.0</strong> indicate a high likelihood
-of exploitation or business impact and should be prioritized
-for remediation.
-</p>
+<div class="summary-box">
+<strong>Finding Summary:</strong><br><br>
+Critical: {{ normalized_findings.Critical | length if normalized_findings.Critical else 0 }}<br>
+High: {{ normalized_findings.High | length if normalized_findings.High else 0 }}<br>
+Medium: {{ normalized_findings.Medium | length if normalized_findings.Medium else 0 }}<br>
+Low: {{ normalized_findings.Low | length if normalized_findings.Low else 0 }}
+</div>
 
 <div class="page-break"></div>
 
@@ -125,33 +218,37 @@ for remediation.
 <img src="{{ heatmap_path }}" width="600">
 {% endif %}
 
-<p>
-The risk heatmap visualizes the distribution of findings by
-severity. Higher concentrations of red indicate increased
-security risk.
-</p>
-
 <div class="page-break"></div>
 
-<!-- ================= FINDINGS ================= -->
+<!-- ================= NORMALIZED FINDINGS ================= -->
 <h2>Technical Findings</h2>
 
-{% for severity, findings in results.items() %}
+{% for severity, findings in normalized_findings.items() %}
 <h3>{{ severity }} Severity Findings</h3>
 
 <table>
 <tr>
-<th>Finding</th>
-<th>Confidence</th>
-<th>Evidence</th>
-<th>Recommendation</th>
-<th>Compliance Impact</th>
+    <th width="18%">Finding</th>
+    <th width="8%">Confidence</th>
+    <th width="12%">CVSS</th>
+    <th width="25%">Evidence</th>
+    <th width="22%">Recommendation</th>
+    <th width="15%">Compliance</th>
 </tr>
+
 
 {% for f in findings %}
 <tr>
 <td class="sev-{{ severity }}">{{ f.title }}</td>
 <td>{{ f.confidence }}</td>
+<td>
+{{ f.cvss }}
+<div class="cvss-bar">
+    <div class="cvss-fill cvss-{{ severity }}"
+         style="width: {{ (f.cvss / 10) * 100 }}%">
+    </div>
+</div>
+</td>
 <td>{{ f.evidence }}</td>
 <td>{{ f.recommendation }}</td>
 <td>
@@ -173,26 +270,41 @@ Not mapped
 <!-- ================= AI REMEDIATION ================= -->
 <h2>AI-Generated Remediation Roadmap</h2>
 
-<p>
-The following remediation guidance was generated using
-artificial intelligence to assist technical and non-technical
-stakeholders in prioritizing corrective actions.
-</p>
-
 <pre>
 {{ remediation_roadmap }}
 </pre>
 
 <div class="page-break"></div>
 
-<!-- ================= RISK ACCEPTANCE ================= -->
-<h2>Risk Acceptance</h2>
+<!-- ================= TOOL OUTPUT APPENDIX ================= -->
+<h2>Tool Output Appendix</h2>
 
 <p>
-Any unresolved risks should be formally reviewed and accepted
-by business stakeholders after considering operational impact,
-threat likelihood, and regulatory obligations.
+This section contains raw findings captured directly from
+security tools during the assessment.
 </p>
+
+{% for tool, items in tool_findings.items() %}
+<h3>{{ tool | upper }}</h3>
+
+<table>
+<tr>
+    <th width="12%">Severity</th>
+    <th width="10%">CVSS</th>
+    <th width="10%">Confidence</th>
+    <th width="68%">Raw Output</th>
+</tr>
+
+{% for item in items %}
+<tr>
+<td class="sev-{{ item.severity }}">{{ item.severity }}</td>
+<td>{{ item.cvss }}</td>
+<td>{{ item.confidence }}</td>
+<td><pre>{{ item.data }}</pre></td>
+</tr>
+{% endfor %}
+</table>
+{% endfor %}
 
 <div class="page-break"></div>
 
@@ -202,11 +314,6 @@ threat likelihood, and regulatory obligations.
 <p>
 This assessment was performed for defensive purposes only.
 No exploitation or intrusive testing was conducted.
-</p>
-
-<p>
-<strong>Assessor:</strong> ___________________________<br>
-<strong>Date:</strong> ___________________________
 </p>
 
 <footer>

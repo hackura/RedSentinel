@@ -15,39 +15,78 @@ def normalize_findings(raw_findings: Dict[str, List[dict]]) -> Dict[str, List[di
     normalized: Dict[str, List[dict]] = {}
 
     for tool, findings in raw_findings.items():
-        for f in findings:
-            confidence = f.get("confidence", 0)
+        if not isinstance(findings, list):
+            continue
 
-            # ---- Confidence-based filtering ----
+        for f in findings:
+            if not isinstance(f, dict):
+                continue
+
+            confidence = float(f.get("confidence", 0))
+
+            # -----------------------------
+            # Confidence-based filtering
+            # -----------------------------
             if confidence < 0.5:
                 continue
 
-            title = generate_title(f["data"])
-            evidence = f["data"]
-            severity = f["severity"]
-            cvss = f["cvss"]
+            raw_data = str(f.get("data", "")).strip()
+            if not raw_data:
+                continue
+
+            severity = normalize_severity(f.get("severity", "LOW"))
+            cvss = normalize_cvss(f.get("cvss", 0.0))
+
+            title = generate_title(raw_data)
 
             normalized_finding = {
                 "tool": tool,
                 "title": title,
                 "severity": severity,
                 "cvss": cvss,
-                "confidence": confidence,
-                "evidence": evidence,
+                "confidence": round(confidence, 2),
+                "evidence": raw_data,
                 "recommendation": generate_recommendation(title),
                 "compliance": map_compliance(title)
             }
 
             category = severity.capitalize()
-
             normalized.setdefault(category, []).append(normalized_finding)
 
     return normalized
 
 
-# =========================
+# ============================================================
 # Helpers
-# =========================
+# ============================================================
+
+def normalize_severity(sev: str) -> str:
+    """
+    Ensures severity is always one of:
+    LOW | MEDIUM | HIGH | CRITICAL
+    """
+    if not isinstance(sev, str):
+        return "LOW"
+
+    sev = sev.upper().strip()
+
+    if sev in {"LOW", "MEDIUM", "HIGH", "CRITICAL"}:
+        return sev
+
+    return "LOW"
+
+
+def normalize_cvss(score) -> float:
+    """
+    Ensures CVSS is a valid float between 0.0 and 10.0
+    """
+    try:
+        score = float(score)
+    except (ValueError, TypeError):
+        return 0.0
+
+    return max(0.0, min(score, 10.0))
+
 
 def generate_title(raw_text: str) -> str:
     text = raw_text.lower()
@@ -60,6 +99,9 @@ def generate_title(raw_text: str) -> str:
 
     if "x-content-type-options" in text:
         return "Missing MIME Type Protection Header"
+
+    if "strict-transport-security" in text:
+        return "Missing HTTP Strict Transport Security (HSTS)"
 
     if "ssl" in text or "tls" in text:
         return "Weak or Deprecated TLS Configuration"
@@ -87,6 +129,12 @@ def generate_recommendation(title: str) -> str:
         return (
             "Enable the X-Content-Type-Options header with the value 'nosniff' "
             "to prevent content-type confusion attacks."
+        )
+
+    if "HSTS" in title:
+        return (
+            "Enable HTTP Strict Transport Security (HSTS) to ensure "
+            "all communication occurs over HTTPS."
         )
 
     if "TLS" in title:
