@@ -237,8 +237,8 @@ pre {
     </div>
 
     <div class="cover-meta">
-        <strong>Target:</strong> {{ target }}<br>
-        <strong>Generated:</strong> {{ generated_on }}
+        <strong>Target:</strong> karlseyra.xyz<br>
+        <strong>Generated:</strong> 2026-01-03 20:43 UTC
     </div>
 </div>
 <p style="margin-top: 40px; font-size: 14px; color: #555;">
@@ -260,15 +260,15 @@ exposure and security posture of the target system.
 
 <p>
 <strong>Executive Risk Rating:</strong>
-{{ executive_risk_score }} / 10
+4.75 / 10
 </p>
 
 <div class="summary-box">
 <strong>Finding Summary:</strong><br><br>
-Critical: {{ normalized_findings.Critical | length if normalized_findings.Critical else 0 }}<br>
-High: {{ normalized_findings.High | length if normalized_findings.High else 0 }}<br>
-Medium: {{ normalized_findings.Medium | length if normalized_findings.Medium else 0 }}<br>
-Low: {{ normalized_findings.Low | length if normalized_findings.Low else 0 }}
+Critical: 0<br>
+High: 0<br>
+Medium: 1<br>
+Low: 0
 </div>
 
 <div class="page-break"></div>
@@ -276,17 +276,14 @@ Low: {{ normalized_findings.Low | length if normalized_findings.Low else 0 }}
 <!-- ================= RISK HEATMAP ================= -->
 <h2>Risk Overview</h2>
 
-{% if heatmap_path %}
-<img src="{{ heatmap_path }}" width="600">
-{% endif %}
+<img src="risk_heatmap.png" width="600">
 
 <div class="page-break"></div>
 
 <!-- ================= NORMALIZED FINDINGS ================= -->
 <h2>Technical Findings</h2>
 
-{% for severity, findings in normalized_findings.items() %}
-<h3>{{ severity }} Severity Findings</h3>
+<h3>Medium Severity Findings</h3>
 
 <table>
 <tr>
@@ -299,33 +296,24 @@ Low: {{ normalized_findings.Low | length if normalized_findings.Low else 0 }}
 </tr>
 
 
-{% for f in findings %}
 <tr>
-<td class="sev-{{ severity }}">{{ f.title }}</td>
-<td>{{ f.confidence }}</td>
+<td class="sev-Medium">General Security Observation</td>
+<td>0.73</td>
 <td>
-{{ f.cvss }}
+6.5
 <div class="cvss-bar">
-    <div class="cvss-fill cvss-{{ severity }}"
-         style="width: {{ (f.cvss / 10) * 100 }}%">
+    <div class="cvss-fill cvss-Medium"
+         style="width: 65.0%">
     </div>
 </div>
 </td>
-<td>{{ f.evidence }}</td>
-<td>{{ f.recommendation }}</td>
+<td>0 host(s) tested</td>
+<td>Review this finding and apply security best practices appropriate to the affected component.</td>
 <td>
-{% if f.compliance %}
-OWASP: {{ f.compliance.OWASP }}<br>
-ISO 27001: {{ f.compliance.ISO27001 }}<br>
-PCI DSS: {{ f.compliance["PCI-DSS"] }}
-{% else %}
 Not mapped
-{% endif %}
 </td>
 </tr>
-{% endfor %}
 </table>
-{% endfor %}
 
 <div class="page-break"></div>
 
@@ -333,7 +321,28 @@ Not mapped
 <h2>AI-Generated Remediation Roadmap</h2>
 
 <pre>
-{{ remediation_roadmap }}
+Security Summary (Offline Analysis)
+
+The assessment identified a total of 1 findings.
+
+Severity breakdown:
+- Critical: 0
+- High: 0
+- Medium: 1
+- Low: 0
+
+The average CVSS score across all findings is 6.5.
+
+Overall Risk Assessment: MEDIUM
+
+The results indicate potential weaknesses primarily related to service exposure,
+configuration issues, or missing security controls. No exploitation was performed.
+
+Recommended Actions:
+- Address higher severity findings first
+- Review exposed services and headers
+- Apply secure configuration baselines
+- Perform periodic reassessments
 </pre>
 
 <div class="page-break"></div>
@@ -346,8 +355,7 @@ This section contains raw findings captured directly from
 security tools during the assessment.
 </p>
 
-{% for tool, items in tool_findings.items() %}
-<h3>{{ tool | upper }}</h3>
+<h3>NIKTO</h3>
 
 <table>
 <tr>
@@ -357,16 +365,13 @@ security tools during the assessment.
     <th width="68%">Raw Output</th>
 </tr>
 
-{% for item in items %}
 <tr>
-<td class="sev-{{ item.severity }}">{{ item.severity }}</td>
-<td>{{ item.cvss }}</td>
-<td>{{ item.confidence }}</td>
-<td><pre>{{ item.data }}</pre></td>
+<td class="sev-MEDIUM">MEDIUM</td>
+<td>6.5</td>
+<td>0.73</td>
+<td><pre>0 host(s) tested</pre></td>
 </tr>
-{% endfor %}
 </table>
-{% endfor %}
 
 <div class="page-break"></div>
 
@@ -387,4 +392,3 @@ No exploitation or intrusive testing was conducted.
 
 </body>
 </html>
-

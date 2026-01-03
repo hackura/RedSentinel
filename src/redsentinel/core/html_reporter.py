@@ -48,8 +48,8 @@ def generate_html_report(
     tool_findings: dict,
     normalized_findings: dict,
     remediation_roadmap: str,
-    heatmap_path: str | None = None,
-    output_dir: Path | str = "reports",
+    heatmap_path: str | None,
+    output_dir: Path,
 ) -> str:
 
     output_dir = Path(output_dir)

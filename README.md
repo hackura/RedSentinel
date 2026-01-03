@@ -68,9 +68,9 @@ Sample reports are included in the project root:
 
 ```
 reports/
-├── report_example.html
-├── report_example.pdf
-└── report_example.json
+├── report_karlseyra.html
+├── report_karlseyra.pdf
+└── report_karlseyra.json
 ```
 
 These demonstrate RedSentinel’s reporting format and structure.

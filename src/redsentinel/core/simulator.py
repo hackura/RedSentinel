@@ -37,6 +37,8 @@ from redsentinel.core.normalizer import normalize_findings
 from redsentinel.core.ai_interpreter import generate_remediation_roadmap
 from redsentinel.core.json_exporter import export_json_report
 from redsentinel.core.state import REPORTS_DIR
+from redsentinel.core.ai_summary import generate_offline_summary
+
 
 
 
@@ -247,7 +249,7 @@ def simulate_scan(target: str) -> SimulationState:
         print("[!] No findings detected by tools")
         return state
 
-    # ---- Enrich + terminal output ----
+        # ---- Enrich + terminal output ----
     enriched: Dict[str, List[dict]] = {}
 
     print("[+] Findings\n" + "-" * 60)
@@ -278,34 +280,48 @@ def simulate_scan(target: str) -> SimulationState:
     normalized = normalize_findings(enriched)
     roadmap = generate_remediation_roadmap(normalized)
 
-    state.json_report = export_json_report(target, normalized)
+    state.json_report = export_json_report(
+        target, normalized, output_dir=REPORTS_DIR
+    )
     print("\n[+] JSON report generated:", state.json_report)
+    
+    # ---- AI / Offline Summary ----
+    try:
+        roadmap = generate_remediation_roadmap(normalized)
+    except Exception as e:
+        print(f"[!] AI unavailable, using offline summary: {e}")
+    roadmap = generate_offline_summary(normalized)
 
     # ---- Report generation ----
     if "--no-report" in sys.argv:
         print("\n[!] --no-report enabled — skipping HTML/PDF generation")
         return state
+        
+    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
-    os.makedirs("reports", exist_ok=True)
-
-    state.heatmap = generate_risk_heatmap(enriched, REPORTS_DIR)
-
-state.json_report = export_json_report(
-    target, normalized, output_dir=REPORTS_DIR
-)
-
-state.html_report = generate_html_report(
-    target=target,
-    tool_findings=enriched,
-    normalized_findings=normalized,
-    remediation_roadmap=roadmap,
-    heatmap_path=state.heatmap,
+    state.json_report = export_json_report(
+    target,
+    normalized,
     output_dir=REPORTS_DIR
-)
+    )
 
-if not is_termux():
-    state.pdf_report = generate_pdf_report(state.html_report)
+    state.heatmap = generate_risk_heatmap(
+    enriched,
+    output_dir=REPORTS_DIR
+    )
 
+
+    state.html_report = generate_html_report(
+        target=target,
+        tool_findings=enriched,
+        normalized_findings=normalized,
+        remediation_roadmap=roadmap,
+        heatmap_path=state.heatmap,
+        output_dir=REPORTS_DIR
+    )
+
+    if not is_termux():
+        state.pdf_report = generate_pdf_report(state.html_report)
     else:
         print("[!] PDF skipped (Termux environment)")
 

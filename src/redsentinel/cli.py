@@ -1,11 +1,12 @@
 import sys
+from pathlib import Path
 
 # =========================
-# Load environment variables EARLY
+# Load environment variables EARLY (Python 3.13 safe)
 # =========================
 try:
     from dotenv import load_dotenv
-    load_dotenv()
+    load_dotenv(dotenv_path=Path(".env"))
 except ImportError:
     print("[!] python-dotenv not installed. Skipping .env loading.")
 

@@ -1,0 +1,19 @@
+{
+  "target": "karlseyra.xyz",
+  "findings": {
+    "Medium": [
+      {
+        "tool": "nikto",
+        "title": "General Security Observation",
+        "severity": "MEDIUM",
+        "cvss": 6.5,
+        "confidence": 0.73,
+        "evidence": "0 host(s) tested",
+        "recommendation": "Review this finding and apply security best practices appropriate to the affected component.",
+        "compliance": {}
+      }
+    ]
+  },
+  "format": "SOC-compatible",
+  "version": "1.0"
+}

@@ -1,46 +1,29 @@
 import os
 import requests
-import json
 
 
 class AIClient:
     """
-    AI Client supporting Google Gemini API
+    Gemini AI Client (REST, stable, v1)
     """
 
     def __init__(self):
-        self.provider = os.getenv("REDSENTINEL_AI_PROVIDER", "gemini").lower()
         self.api_key = os.getenv("REDSENTINEL_AI_KEY")
-
         if not self.api_key:
             raise EnvironmentError("REDSENTINEL_AI_KEY not set")
 
-        if self.provider != "gemini":
-            raise ValueError("Only Gemini provider is supported currently")
-
         self.api_url = (
-            "https://generativelanguage.googleapis.com/v1beta/models/"
+            "https://generativelanguage.googleapis.com/v1/models/"
             "gemini-1.5-flash:generateContent"
         )
 
     def generate(self, system_prompt: str, user_prompt: str) -> str:
-        """
-        Generate AI response using Gemini
-        """
-
         payload = {
             "contents": [
                 {
-                    "role": "user",
                     "parts": [
                         {
-                            "text": f"""
-SYSTEM:
-{system_prompt}
-
-USER:
-{user_prompt}
-"""
+                            "text": f"{system_prompt}\n\n{user_prompt}"
                         }
                     ]
                 }
