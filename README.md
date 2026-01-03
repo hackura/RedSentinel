@@ -52,7 +52,7 @@ It is designed for:
 ## Installation Guide
 
 <p align="center">
-  <video src="assets/redsentinel-video.mp4" width="90%" />
+  <video src="assets/redsentinel-video.mp4" autoplay muted playsinline loop controls width="600" height="400"/>
 </p>
 
 ---
