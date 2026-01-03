@@ -49,11 +49,9 @@ It is designed for:
 
 ---
 
-## Installation Guide
+## nstallation Guide (Visual Walkthrough)
 
-<p align="center">
-  <video src="assets/redsentinel-demo.gif" autoplay muted playsinline loop controls width="600" height="400"/>
-</p>
+<p align="center"> <img src="assets/redsentinel-demo.gif" width="800" alt="RedSentinel installation walkthrough"/> </p> <p align="center"> <em>Step-by-step installation and first-run demonstration of the RedSentinel CLI.</em> </p>
 
 ---
 ##  Key Features
