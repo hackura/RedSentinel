@@ -17,7 +17,7 @@ Older commits are **not supported**.
 
 If you discover a security vulnerability **in RedSentinel itself** (not in scanned targets):
 
-📧 **Email:** [hackura.security@proton.me](mailto:hackura.security@proton.me)
+📧 **Email:** [hackura@keemail.me](mailto:hackura@keemail.me)
 🔐 **PGP:** Available on request
 
 Please include:

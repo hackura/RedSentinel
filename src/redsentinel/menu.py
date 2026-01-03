@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 RedSentinel - Interactive CLI Menu
-AI-Assisted Red Team Simulation Framework (Educational)
+AI-Assisted SOC Simulation Framework (Educational)
 """
 
 import time
@@ -18,10 +18,10 @@ BANNER = r"""
 ██████╔╝█████╗  ██║  ██║███████╗█████╗  ██╔██╗ ██║   ██║   ██║██╔██╗ ██║█████╗  ██║
 ██╔══██╗██╔══╝  ██║  ██║╚════██║██╔══╝  ██║╚██╗██║   ██║   ██║██║╚██╗██║██╔══╝  ██║
 ██║  ██║███████╗██████╔╝███████║███████╗██   ████║   ██║   ██║██║ ╚████║███████╗███████╗
-╚═╝  ╚═╝╚══════╝╚═════╝ ╚══════╝╚══════╝╚════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝╚═╝  ╚═══╝╚══════╝╚══════╝
+╚═╝  ╚═╝╚══════╝╚═════╝ ╚══════╝╚══════╝╚════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝╚═╝  ╚═══╝╚══════╝╚═
 """
 
-SUBTITLE = "AI-Assisted Red Team Simulation Framework"
+SUBTITLE = "AI-Assisted SOC Simulation Framework"
 
 
 def pause():
