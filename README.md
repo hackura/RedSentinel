@@ -78,7 +78,7 @@ reports/
 └── report_karlseyra.json
 ```
 
-These demonstrate RedSentinel’s reporting format and structure.
+These demonstrate RedSentinel's reporting format and structure.
 
 ---
 
@@ -87,9 +87,18 @@ These demonstrate RedSentinel’s reporting format and structure.
 ### Linux / macOS
 
 ```bash
-python -m venv venv
+# For Linux (Debian/Ubuntu):
+# sudo apt update && sudo apt install git nmap nikto whatweb sslscan
+
+# For macOS:
+# brew install git nmap nikto sslscan
+
+git clone https://github.com/hackura/RedSentinel.git
+cd RedSentinel
+
+python3 -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
+pip install -e .
 ```
 
 ### Termux (Android)
@@ -98,8 +107,12 @@ pip install -r requirements.txt
 pkg update && pkg upgrade
 pkg install python git clang openssl libxml2 libxslt
 pkg install nmap nikto whatweb sslscan
+
+git clone https://github.com/hackura/RedSentinel.git
+cd RedSentinel
+
 pip install --upgrade pip setuptools wheel
-pip install -r requirements.txt
+pip install -e .
 ```
 
 ⚠️ **Termux Notes**
@@ -189,4 +202,3 @@ The authors are not responsible for misuse.
 
 **RedSentinel — Hackura Project**
 Educational & Research Use Only
-
