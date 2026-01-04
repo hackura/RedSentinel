@@ -19,9 +19,6 @@ dependencies = [
     "requests>=2.31.0",
     "jinja2>=3.1.2",
     "python-dotenv>=1.0.0",
-    "matplotlib>=3.8.0",
-    "numpy>=1.26.0",
-    "weasyprint>=60.0",
     "rich>=13.7.0"
 ]
 
@@ -31,7 +28,23 @@ classifiers = [
     "Topic :: Security",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
-    "Operating System :: POSIX :: Linux"
+    "Operating System :: POSIX"
+]
+
+[project.optional-dependencies]
+visuals = [
+    "matplotlib>=3.8.0",
+    "numpy>=1.26.0"
+]
+
+reports = [
+    "weasyprint>=60.0"
+]
+
+all = [
+    "matplotlib>=3.8.0",
+    "numpy>=1.26.0",
+    "weasyprint>=60.0"
 ]
 
 [project.scripts]
@@ -50,7 +63,7 @@ where = ["src"]
 [tool.setuptools.package-data]
 redsentinel = [
     "templates/*.html",
-    "assets/*",
+    "assets/**/*",
     "reports/*",
     "samples/*"
 ]

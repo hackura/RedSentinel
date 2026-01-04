@@ -20,12 +20,14 @@ Features:
 - JSON parsing where supported
 - Termux auto-detection
 - --no-report CLI flag support
+- AI summary with offline fallback
 """
 
 import subprocess
 import os
 import sys
 import json
+import shutil
 from dataclasses import dataclass, field
 from typing import Dict, List
 
@@ -40,8 +42,6 @@ from redsentinel.core.state import REPORTS_DIR
 from redsentinel.core.ai_summary import generate_offline_summary
 
 
-
-
 # =========================
 # Termux detection
 # =========================
@@ -51,8 +51,16 @@ def is_termux() -> bool:
 
 
 if is_termux():
-    print("[!] Termux detected — ensure tools are installed via pkg")
+    print("[!] Termux detected — ensure tools are installed via pkg / git")
     print("[!] PDF generation may be disabled")
+
+
+# =========================
+# Tool availability
+# =========================
+
+def has_tool(cmd: str) -> bool:
+    return shutil.which(cmd) is not None
 
 
 # =========================
@@ -83,31 +91,59 @@ def run_cmd(cmd: list[str], timeout: int = 120) -> str:
             timeout=timeout
         )
         return res.stdout
-    except Exception as e:
-        return f"[ERROR] {e}"
+    except Exception:
+        return ""
 
 
 # =========================
-# Tool wrappers
+# Tool wrappers (HARDENED)
 # =========================
 
 def run_ping(target: str) -> str:
+    if not has_tool("ping"):
+        print("[!] ping skipped (not installed)")
+        return ""
     return run_cmd(["ping", "-c", "3", target], timeout=20)
 
 
 def run_nmap(target: str) -> str:
+    if not has_tool("nmap"):
+        print("[!] nmap skipped (not installed)")
+        return ""
     return run_cmd(["nmap", "-Pn", "-sV", "--script", "safe", target])
 
 
 def run_whatweb(target: str) -> str:
+    if not has_tool("whatweb"):
+        print("[!] whatweb skipped (not installed)")
+        return ""
+    if not has_tool("ruby"):
+        print("[!] whatweb skipped (ruby not installed)")
+        return ""
     return run_cmd(["whatweb", target])
 
 
 def run_nikto(target: str) -> str:
+    if not has_tool("nikto"):
+        print("[!] nikto skipped (not installed)")
+        return ""
+    if not has_tool("perl"):
+        print("[!] nikto skipped (perl not installed)")
+        return ""
     return run_cmd(["nikto", "-h", target])
 
 
+def run_sslscan(target: str) -> str:
+    if not has_tool("sslscan"):
+        print("[!] sslscan skipped (not installed)")
+        return ""
+    return run_cmd(["sslscan", target])
+
+
 def run_httpx_json(target: str) -> List[dict]:
+    if not has_tool("httpx"):
+        print("[!] httpx skipped (not installed)")
+        return []
     try:
         res = subprocess.run(
             ["httpx", "-json", "-tech-detect", "-status-code", "-u", target],
@@ -120,11 +156,10 @@ def run_httpx_json(target: str) -> List[dict]:
         return []
 
 
-def run_sslscan(target: str) -> str:
-    return run_cmd(["sslscan", target])
-
-
 def run_nuclei_json(target: str) -> List[dict]:
+    if not has_tool("nuclei"):
+        print("[!] nuclei skipped (not installed)")
+        return []
     try:
         res = subprocess.run(
             ["nuclei", "-u", target, "-json"],
@@ -249,7 +284,7 @@ def simulate_scan(target: str) -> SimulationState:
         print("[!] No findings detected by tools")
         return state
 
-        # ---- Enrich + terminal output ----
+    # ---- Enrich + terminal output ----
     enriched: Dict[str, List[dict]] = {}
 
     print("[+] Findings\n" + "-" * 60)
@@ -276,41 +311,35 @@ def simulate_scan(target: str) -> SimulationState:
 
     state.findings = enriched
 
-    # ---- Normalize + AI interpretation ----
+    # ---- Normalize ----
     normalized = normalize_findings(enriched)
-    roadmap = generate_remediation_roadmap(normalized)
 
-    state.json_report = export_json_report(
-        target, normalized, output_dir=REPORTS_DIR
-    )
-    print("\n[+] JSON report generated:", state.json_report)
-    
-    # ---- AI / Offline Summary ----
+    # ---- AI / Offline summary (SAFE FALLBACK) ----
     try:
         roadmap = generate_remediation_roadmap(normalized)
     except Exception as e:
         print(f"[!] AI unavailable, using offline summary: {e}")
-    roadmap = generate_offline_summary(normalized)
+        roadmap = generate_offline_summary(normalized)
 
-    # ---- Report generation ----
+    # ---- JSON report ----
+    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+    state.json_report = export_json_report(
+        target, normalized, output_dir=REPORTS_DIR
+    )
+    print("\n[+] JSON report generated:", state.json_report)
+
+    # ---- Skip reports if requested ----
     if "--no-report" in sys.argv:
         print("\n[!] --no-report enabled — skipping HTML/PDF generation")
         return state
-        
-    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
-    state.json_report = export_json_report(
-    target,
-    normalized,
-    output_dir=REPORTS_DIR
-    )
-
+    # ---- Risk heatmap ----
     state.heatmap = generate_risk_heatmap(
-    enriched,
-    output_dir=REPORTS_DIR
+        enriched,
+        output_dir=REPORTS_DIR
     )
 
-
+    # ---- HTML report ----
     state.html_report = generate_html_report(
         target=target,
         tool_findings=enriched,
@@ -320,6 +349,7 @@ def simulate_scan(target: str) -> SimulationState:
         output_dir=REPORTS_DIR
     )
 
+    # ---- PDF report ----
     if not is_termux():
         state.pdf_report = generate_pdf_report(state.html_report)
     else:

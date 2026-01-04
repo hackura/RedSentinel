@@ -1,0 +1,79 @@
+{
+  "target": "karl.com",
+  "findings": {
+    "Medium": [
+      {
+        "tool": "ping",
+        "title": "General Security Observation",
+        "severity": "MEDIUM",
+        "cvss": 6.5,
+        "confidence": 0.62,
+        "evidence": "Host is reachable via ICMP",
+        "recommendation": "Review this finding and apply security best practices appropriate to the affected component.",
+        "compliance": {}
+      },
+      {
+        "tool": "ping",
+        "title": "General Security Observation",
+        "severity": "MEDIUM",
+        "cvss": 6.5,
+        "confidence": 0.62,
+        "evidence": "Host is reachable via ICMP",
+        "recommendation": "Review this finding and apply security best practices appropriate to the affected component.",
+        "compliance": {}
+      },
+      {
+        "tool": "ping",
+        "title": "General Security Observation",
+        "severity": "MEDIUM",
+        "cvss": 6.5,
+        "confidence": 0.62,
+        "evidence": "Host is reachable via ICMP",
+        "recommendation": "Review this finding and apply security best practices appropriate to the affected component.",
+        "compliance": {}
+      },
+      {
+        "tool": "whatweb",
+        "title": "Missing MIME Type Protection Header",
+        "severity": "MEDIUM",
+        "cvss": 6.5,
+        "confidence": 0.68,
+        "evidence": "\u001b[1m\u001b[34mhttp://karl.com\u001b[0m [301 Moved Permanently] \u001b[1mCountry\u001b[0m[\u001b[0m\u001b[22mCANADA\u001b[0m][\u001b[1m\u001b[31mCA\u001b[0m], \u001b[1mHTTPServer\u001b[0m[\u001b[1m\u001b[36mcloudflare\u001b[0m], \u001b[1mIP\u001b[0m[\u001b[0m\u001b[22m23.227.38.65\u001b[0m], \u001b[1mRedirectLocation\u001b[0m[\u001b[0m\u001b[22mhttps://karl.com/\u001b[0m], \u001b[1mTitle\u001b[0m[\u001b[1m\u001b[33m301 Moved Permanently\u001b[0m], \u001b[1mUncommonHeaders\u001b[0m[\u001b[0m\u001b[22mreport-to,nel,server-timing,x-content-type-options,x-permitted-cross-domain-policies,x-download-options,cf-ray,alt-svc\u001b[0m], \u001b[1mX-XSS-Protection\u001b[0m[\u001b[0m\u001b[22m1; mode=block\u001b[0m]",
+        "recommendation": "Enable the X-Content-Type-Options header with the value 'nosniff' to prevent content-type confusion attacks.",
+        "compliance": {}
+      },
+      {
+        "tool": "whatweb",
+        "title": "Missing Clickjacking Protection Header",
+        "severity": "MEDIUM",
+        "cvss": 6.5,
+        "confidence": 0.68,
+        "evidence": "\u001b[1m\u001b[34mhttps://karl.com\u001b[0m [301 Moved Permanently] \u001b[1mCookies\u001b[0m[\u001b[0m\u001b[22m_shopify_essential\u001b[0m], \u001b[1mCountry\u001b[0m[\u001b[0m\u001b[22mCANADA\u001b[0m][\u001b[1m\u001b[31mCA\u001b[0m], \u001b[1mHTTPServer\u001b[0m[\u001b[1m\u001b[36mcloudflare\u001b[0m], \u001b[1mHttpOnly\u001b[0m[\u001b[0m\u001b[22m_shopify_essential\u001b[0m], \u001b[1mIP\u001b[0m[\u001b[0m\u001b[22m23.227.38.65\u001b[0m], \u001b[1mRedirectLocation\u001b[0m[\u001b[0m\u001b[22mhttps://www.karllagerfeld.com/\u001b[0m], \u001b[1mStrict-Transport-Security\u001b[0m[\u001b[0m\u001b[22mmax-age=7889238\u001b[0m], \u001b[1mUncommonHeaders\u001b[0m[\u001b[0m\u001b[22mcf-ray,x-sorting-hat-podid,x-sorting-hat-shopid,x-storefront-renderer-rendered,x-redirect-reason,shopify-complexity-score,content-security-policy,x-shopid,x-shardid,powered-by,server-timing,x-dc,x-request-id,alt-svc,cf-cache-status,report-to,nel,x-content-type-options,x-permitted-cross-domain-policies,x-download-options\u001b[0m], \u001b[1mX-Frame-Options\u001b[0m[\u001b[0m\u001b[22mDENY\u001b[0m], \u001b[1mX-XSS-Protection\u001b[0m[\u001b[0m\u001b[22m1; mode=block\u001b[0m]",
+        "recommendation": "Implement the X-Frame-Options or Content-Security-Policy frame-ancestors directive to prevent UI redressing attacks.",
+        "compliance": {}
+      },
+      {
+        "tool": "whatweb",
+        "title": "Missing Clickjacking Protection Header",
+        "severity": "MEDIUM",
+        "cvss": 6.5,
+        "confidence": 0.68,
+        "evidence": "\u001b[1m\u001b[34mhttps://karl.com/\u001b[0m [301 Moved Permanently] \u001b[1mCookies\u001b[0m[\u001b[0m\u001b[22m_shopify_essential\u001b[0m], \u001b[1mCountry\u001b[0m[\u001b[0m\u001b[22mCANADA\u001b[0m][\u001b[1m\u001b[31mCA\u001b[0m], \u001b[1mHTTPServer\u001b[0m[\u001b[1m\u001b[36mcloudflare\u001b[0m], \u001b[1mHttpOnly\u001b[0m[\u001b[0m\u001b[22m_shopify_essential\u001b[0m], \u001b[1mIP\u001b[0m[\u001b[0m\u001b[22m23.227.38.65\u001b[0m], \u001b[1mRedirectLocation\u001b[0m[\u001b[0m\u001b[22mhttps://www.karllagerfeld.com/\u001b[0m], \u001b[1mStrict-Transport-Security\u001b[0m[\u001b[0m\u001b[22mmax-age=7889238\u001b[0m], \u001b[1mUncommonHeaders\u001b[0m[\u001b[0m\u001b[22mcf-ray,x-sorting-hat-podid,x-sorting-hat-shopid,x-storefront-renderer-rendered,x-redirect-reason,shopify-complexity-score,content-security-policy,x-shopid,x-shardid,alt-svc,powered-by,server-timing,x-dc,x-request-id,cf-cache-status,report-to,nel,x-content-type-options,x-permitted-cross-domain-policies,x-download-options\u001b[0m], \u001b[1mX-Frame-Options\u001b[0m[\u001b[0m\u001b[22mDENY\u001b[0m], \u001b[1mX-XSS-Protection\u001b[0m[\u001b[0m\u001b[22m1; mode=block\u001b[0m]",
+        "recommendation": "Implement the X-Frame-Options or Content-Security-Policy frame-ancestors directive to prevent UI redressing attacks.",
+        "compliance": {}
+      },
+      {
+        "tool": "whatweb",
+        "title": "Missing Clickjacking Protection Header",
+        "severity": "MEDIUM",
+        "cvss": 6.5,
+        "confidence": 0.68,
+        "evidence": "\u001b[1m\u001b[34mhttps://www.karllagerfeld.com/\u001b[0m [200 OK] \u001b[1mBootstrap\u001b[0m, \u001b[1mContent-Language\u001b[0m[\u001b[0m\u001b[22men-NL\u001b[0m], \u001b[1mCookies\u001b[0m[\u001b[0m\u001b[22m__cf_bm,_shopify_analytics,_shopify_essential,_shopify_s,_shopify_y,cart_currency,localization\u001b[0m], \u001b[1mCountry\u001b[0m[\u001b[0m\u001b[22mCANADA\u001b[0m][\u001b[1m\u001b[31mCA\u001b[0m], \u001b[1mHTML5\u001b[0m, \u001b[1mHTTPServer\u001b[0m[\u001b[1m\u001b[36mcloudflare\u001b[0m], \u001b[1mHttpOnly\u001b[0m[\u001b[0m\u001b[22m__cf_bm,_shopify_analytics,_shopify_essential\u001b[0m], \u001b[1mIP\u001b[0m[\u001b[0m\u001b[22m23.227.38.74\u001b[0m], \u001b[1mOpen-Graph-Protocol\u001b[0m[\u001b[1m\u001b[32mwebsite\u001b[0m], \u001b[1mScript\u001b[0m[\u001b[0m\u001b[22mapplication/json,application/ld+json,importmap,index,module,text/javascript\u001b[0m], \u001b[1mStrict-Transport-Security\u001b[0m[\u001b[0m\u001b[22mmax-age=15552000; includeSubDomains; preload\u001b[0m], \u001b[1mTitle\u001b[0m[\u001b[1m\u001b[33mKARL LAGERFELD Netherlands | Designer Clothing, Fashion &amp; Accessories\u001b[0m], \u001b[1mUncommonHeaders\u001b[0m[\u001b[0m\u001b[22mcf-ray,cf-cache-status,link,alt-svc,nel,report-to,x-content-type-options,x-download-options,x-permitted-cross-domain-policies,content-security-policy,powered-by,server-timing,shopify-complexity-score,speculation-rules,x-dc,x-request-id,x-shardid,x-shopid,x-sorting-hat-podid,x-sorting-hat-shopid,x-storefront-renderer-rendered\u001b[0m], \u001b[1mX-Frame-Options\u001b[0m[\u001b[0m\u001b[22mDENY\u001b[0m], \u001b[1mX-XSS-Protection\u001b[0m[\u001b[0m\u001b[22m1; mode=block\u001b[0m]",
+        "recommendation": "Implement the X-Frame-Options or Content-Security-Policy frame-ancestors directive to prevent UI redressing attacks.",
+        "compliance": {}
+      }
+    ]
+  },
+  "format": "SOC-compatible",
+  "version": "1.0"
+}

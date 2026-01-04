@@ -8,7 +8,7 @@ import time
 import sys
 
 from redsentinel.core.analyzer import analyze_file
-from redsentinel.core.planner import generate_plan
+from redsentinel.core.planner import generate_attack_plan
 from redsentinel.core.simulator import simulate_scan
 
 
@@ -22,6 +22,8 @@ BANNER = r"""
 """
 
 SUBTITLE = "AI-Assisted SOC Simulation Framework"
+
+REDSENTINEL_GITHUB = "https://github.com/hackura/redsentinel"
 
 
 def pause():
@@ -41,6 +43,7 @@ def launch_menu():
         print("\033c", end="")  # clear screen
         print(BANNER)
         print(SUBTITLE)
+        print(f"RedSentinel GitHub : {REDSENTINEL_GITHUB}")
         print("-" * 60)
 
         print_menu()
@@ -51,7 +54,6 @@ def launch_menu():
             print("\n[+] Exiting RedSentinel. Stay sharp ")
             sys.exit(0)
 
-        
         # ANALYZE
         elif choice == "1":
             file_path = input("\nEnter scan/log file path: ").strip()
@@ -63,13 +65,13 @@ def launch_menu():
                 print(f"[!] Analysis failed: {e}")
             pause()
 
-        # PLAN
+        # PLAN (ATTACK PLAN ONLY)
         elif choice == "2":
             target = input("\nEnter target: ").strip()
-            print("\n[+] Generating AI-assisted attack plan...")
+            print("\n[+] Generating attack plan...")
             time.sleep(1)
             try:
-                generate_plan(target, framework="mitre")
+                generate_attack_plan(target, framework="mitre")
             except Exception as e:
                 print(f"[!] Planning failed: {e}")
             pause()

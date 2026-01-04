@@ -1,105 +1,197 @@
-#  RedSentinel
+# RedSentinel
 
 <p align="center">
-  <img src="assets/redsentinel-logo.png" width="160" />
+  <img src="assets/redsentinel-logo.png" width="160" alt="RedSentinel Logo" />
 </p>
 
 <p align="center">
-<strong>AI‑Assisted Defensive Security Scanning & Reporting Framework</strong><br>
-Educational • Research • Blue‑Team Focused
+<strong>AI-Assisted Security Assessment & Planning Framework</strong><br>
+Educational • Research • Defensive & Blue-Team Focused
+</p>
+
+<p align="center">
+  <a href="https://pypi.org/project/redsentinel/">
+    <img src="https://img.shields.io/pypi/v/redsentinel.svg" alt="PyPI version">
+  </a>
+  <a href="https://pypi.org/project/redsentinel/">
+    <img src="https://img.shields.io/pypi/dm/redsentinel.svg" alt="PyPI downloads">
+  </a>
+  <a href="https://pypi.org/project/redsentinel/">
+    <img src="https://img.shields.io/pypi/pyversions/redsentinel.svg" alt="Python versions">
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/pypi/l/redsentinel.svg" alt="License">
+  </a>
+</p>
+
+<p align="center">
+<a href="https://pypi.org/project/redsentinel/">PyPI</a> •
+<a href="https://github.com/hackura/redsentinel">GitHub</a>
 </p>
 
 ---
 
-##  Overview
+## Overview
 
-**RedSentinel** is an AI‑assisted security assessment tool that orchestrates well‑known defensive scanners, normalizes their output, enriches findings with risk context, and generates **professional‑grade HTML, PDF, and JSON reports**.
+**RedSentinel** is an AI-assisted security assessment framework that supports **live defensive scanning**, **attack planning**, **log analysis**, and **remediation planning** — all from a single, unified CLI.
 
-It is designed for:
+It orchestrates industry-standard tools, normalizes their output, enriches findings with risk context, and generates **professional-grade insights** usable by:
 
 * Blue teams
 * Security students
 * Researchers
-* Defensive assessments
+* SOC analysts
 
 🚫 **No exploitation. No payloads. No intrusion.**
+RedSentinel is designed for **authorized, defensive security testing only**.
 
 ---
 
-##  Tool Coverage
+## What Makes RedSentinel Different
+
+✔ Dual-mode operation: **interactive menu + full CLI**
+✔ Works **online or fully offline**
+✔ Supports **external scan logs** (`.json`, `.log`)
+✔ Termux-aware & low-resource friendly
+✔ Designed as a **learning + professional tool**
+
+---
+
+## Tool Coverage
 
 ![nmap](https://img.shields.io/badge/nmap-active-blue)
 ![nikto](https://img.shields.io/badge/nikto-active-blue)
 ![whatweb](https://img.shields.io/badge/whatweb-active-blue)
-![httpx](https://img.shields.io/badge/httpx-active-blue)
 ![sslscan](https://img.shields.io/badge/sslscan-active-blue)
 ![ping](https://img.shields.io/badge/ping-active-blue)
 
----
-
-##  CLI in Action
-
-<p align="center">
-  <img src="assets/cli.png" width="90%" />
-</p>
-
-<p align="center">
-  <img src="assets/cli_in_action.png" width="90%" />
-</p>
+Unavailable tools are **automatically skipped** — no crashes.
 
 ---
 
-## Installation Guide (Visual Walkthrough)
+## CLI Usage
 
-<p align="center"> <img src="assets/redsentinel-demo.gif" width="800" alt="RedSentinel installation walkthrough"/> </p> <p align="center"> <em>Step-by-step installation and first-run demonstration of the RedSentinel CLI.</em> </p>
-
----
-##  Key Features
-
-* Live execution of industry‑standard scanners
-* Confidence‑weighted findings
-* CVSS‑based severity scoring
-* AI‑generated remediation roadmap
-* Compliance mapping (OWASP, ISO 27001, PCI DSS)
-* Risk heatmap visualization
-* HTML, PDF & JSON reporting
-* Termux‑aware execution
-
----
-
-##  Example Reports
-
-Sample reports are included in the project root:
-
-```
-reports/
-├── report_karlseyra.html
-├── report_karlseyra.pdf
-└── report_karlseyra.json
-```
-
-These demonstrate RedSentinel's reporting format and structure.
-
----
-
-## ⚙️ Installation
-
-### Linux / macOS
+### Show help
 
 ```bash
-# For Linux (Debian/Ubuntu):
-# sudo apt update && sudo apt install git nmap nikto whatweb sslscan
+redsentinel --help
+```
 
-# For macOS:
-# brew install git nmap sslscan perl ruby
-# 
-# Manual installation for nikto and whatweb on macOS:
-# cd ~ && git clone https://github.com/sullo/nikto.git
-# echo 'export PATH=$PATH:~/nikto/program' >> ~/.zshrc
-# cd ~ && git clone https://github.com/urbanadventurer/WhatWeb.git
-# echo 'export PATH=$PATH:~/WhatWeb' >> ~/.zshrc
-# source ~/.zshrc
+### About the tool
 
+```bash
+redsentinel --about
+```
+
+### Environment & dependency check
+
+```bash
+redsentinel doctor
+```
+
+---
+
+## Scanning
+
+### Run a live defensive scan
+
+```bash
+redsentinel scan example.com
+```
+
+* Executes available tools only
+* Generates structured scan artifacts
+* Safe defaults (no exploitation)
+
+<p align="center">
+  <img src="assets/cli.png" width="90%" alt="CLI output" />
+</p>
+
+---
+
+## Planning
+
+### Generate an **Attack / Engagement Plan** (NO scanning)
+
+```bash
+redsentinel plan example.com
+```
+
+Produces a **red-team style attack plan**, including:
+
+* Recon steps
+* Attack surface mapping
+* Credential & access checks
+* MITRE-aligned methodology
+
+✔ Offline
+✔ No tools required
+
+---
+
+### Generate a **Remediation Plan** (Post-scan)
+
+```bash
+redsentinel plan example.com --remediate
+```
+
+* Loads the **latest scan report**
+* Generates prioritized remediation steps
+* No live scanning required
+
+---
+
+## Logs & Analysis
+
+### List available scan artifacts
+
+```bash
+redsentinel logs
+```
+
+### View a scan log
+
+```bash
+redsentinel --scan-log reports/example.com.json
+redsentinel --scan-log /var/log/nmap_scan.log
+```
+
+✔ External directories supported
+✔ Read-only & safe
+
+---
+
+## Interactive Menu
+
+```bash
+redsentinel
+```
+
+<p align="center">
+  <img src="assets/cli_in_action.png" width="90%" alt="Menu in action" />
+</p>
+
+---
+
+## Demo
+
+<p align="center">
+  <img src="assets/redsentinel-demo.gif" width="90%" alt="RedSentinel demo" />
+</p>
+
+---
+
+## Installation (PyPI – Recommended)
+
+```bash
+pip install redsentinel
+```
+
+---
+
+## Manual Installation (Dev)
+
+```bash
 git clone https://github.com/hackura/RedSentinel.git
 cd RedSentinel
 
@@ -108,124 +200,75 @@ source venv/bin/activate
 pip install -e .
 ```
 
-### Termux (Android)
+---
+
+## Termux (Android)
 
 ```bash
 pkg update && pkg upgrade
-pkg install python git clang openssl libxml2 libxslt golang perl ruby
+pkg install python git clang openssl libxml2 libxslt perl ruby
 pkg install nmap sslscan
 
-# Install httpx
-go install github.com/projectdiscovery/httpx/cmd/httpx@latest
-
-# Install nikto (manual)
-cd ~
 git clone https://github.com/sullo/nikto.git
-echo 'export PATH=$PATH:~/nikto/program' >> ~/.bashrc
-
-# Install whatweb (manual)
-cd ~
 git clone https://github.com/urbanadventurer/WhatWeb.git
-echo 'export PATH=$PATH:~/WhatWeb' >> ~/.bashrc
 
-# Apply PATH changes
-source ~/.bashrc
-
-# Install RedSentinel
-cd ~
-git clone https://github.com/hackura/RedSentinel.git
-cd RedSentinel
-
-pip install --upgrade pip setuptools wheel
-pip install -e .
+pip install redsentinel
 ```
 
-⚠️ **Termux Notes**
+---
 
-* PDF generation may be skipped
-* ICMP may be restricted (nmap uses `-Pn` automatically)
-* Always install tools using `pkg`, not `apt`
-* nikto and whatweb require manual installation from GitHub
-* RedSentinel will skip unavailable tools automatically
+## AI-Assisted Intelligence
+
+RedSentinel includes **offline-safe AI logic** and optional online AI enrichment to:
+
+* Summarize scan results
+* Explain risks in plain language
+* Generate remediation guidance
+
+✔ Offline fallback supported
 
 ---
 
-Run the interactive CLI:
+## 🛣️ Roadmap
 
-```bash
-redsentinel
-```
+### v0.1.x (Current)
 
-Run a scan without generating reports:
+* ✔ Interactive menu + full CLI
+* ✔ Defensive scanning (nmap, nikto, whatweb)
+* ✔ Attack planning (offline)
+* ✔ Remediation planning (post-scan)
+* ✔ External log analysis
+* ✔ Termux support
 
-```bash
-redsentinel --no-report
-```
+### v0.2.x (Next)
 
-Follow the interactive menu to run a scan and generate reports.
+* ⏳ AI-powered scan summarization (online + offline)
+* ⏳ JSON / PDF export for plans
+* ⏳ Framework selector (`--framework mitre|owasp`)
+* ⏳ Improved report templates
 
----
+### v0.3.x
 
-##  AI‑Assisted Reporting
+* ⏳ CI/CD friendly non-interactive mode
+* ⏳ Plugin system for tools
+* ⏳ Risk scoring improvements
 
-RedSentinel uses AI to:
+### v1.0 (Long-Term)
 
-* Summarize technical findings
-* Generate prioritized remediation steps
-* Translate raw scan data into executive‑friendly language
-
-AI output **never performs exploitation**.
-
----
-
-##  Connect
-
-* GitHub: [https://github.com/hackura](https://github.com/hackura)
-* Twitter / X: [https://twitter.com/dorpe_karl](https://twitter.com/dorpe_karl)
-* LinkedIn: [https://linkedin.com/in/karlseyramdorpe](https://linkedin.com/in/karlseyramdorpe)
+* ⏳ Stable API
+* ⏳ Enterprise-ready reporting
+* ⏳ Educational lab mode
+* ⏳ Community plugins
 
 ---
 
-## References & Citations
-
-RedSentinel aligns with established security standards:
-
-* **OWASP Top 10**
-  [https://owasp.org/www-project-top-ten/](https://owasp.org/www-project-top-ten/)
-
-* **NIST SP 800‑53 / 800‑61**
-  [https://csrc.nist.gov/](https://csrc.nist.gov/)
-
-* **CVSS v3.1**
-  [https://www.first.org/cvss/](https://www.first.org/cvss/)
-
-* **MITRE ATT&CK**
-  [https://attack.mitre.org/](https://attack.mitre.org/)
-
-These frameworks guide severity scoring, compliance mapping, and reporting logic.
-
----
-
-## Support the Project
-
-If RedSentinel helps you learn or work better:
-
-* ⭐ Star the repository
-* ☕ Donate: [https://buymeacoffee.com/hackura](https://buymeacoffee.com/hackura)
-* Share the project
-* Contribute code or documentation
-
----
-
-## ⚠️ Disclaimer
+## Disclaimer
 
 RedSentinel is intended for **authorized defensive security testing only**.
-
-You must own the target or have explicit permission before scanning.
-
-The authors are not responsible for misuse.
+You must own the target or have permission before scanning.
 
 ---
 
 **RedSentinel — Hackura Project**
 Educational & Research Use Only
+

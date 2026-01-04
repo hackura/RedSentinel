@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RedSentinel Security Assessment Report</title>
+
+<style>
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 40px;
+    color: #222;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header img {
+    height: 80px;
+}
+
+h1 {
+    color: #8b0000;
+    font-size: 38px;
+    margin: 0;
+}
+
+h2 {
+    color: #8b0000;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 6px;
+    margin-top: 50px;
+}
+
+h3 {
+    margin-top: 30px;
+}
+
+p {
+    line-height: 1.6;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    vertical-align: top;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+.sev-Critical { color: darkred; font-weight: bold; }
+.sev-High { color: red; font-weight: bold; }
+.sev-Medium { color: orange; }
+.sev-Low { color: green; }
+
+.cvss-bar {
+    background: #eee;
+    width: 100%;
+    height: 14px;
+    border-radius: 4px;
+}
+
+.cvss-fill {
+    height: 14px;
+    border-radius: 4px;
+}
+
+.cvss-Critical { background: darkred; }
+.cvss-High { background: red; }
+.cvss-Medium { background: orange; }
+.cvss-Low { background: green; }
+
+.summary-box {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-top: 20px;
+    background: #fafafa;
+}
+
+.page-break {
+    page-break-before: always;
+}
+
+.watermark {
+    position: fixed;
+    top: 40%;
+    left: 15%;
+    font-size: 90px;
+    color: rgba(180, 180, 180, 0.12);
+    transform: rotate(-30deg);
+    z-index: -1;
+}
+
+footer {
+    margin-top: 60px;
+    font-size: 11px;
+    color: #777;
+    text-align: center;
+}
+
+/* ============================================================
+   PDF SAFETY & PRINT OPTIMIZATION (WeasyPrint)
+   ============================================================ */
+
+/* Page setup */
+@page {
+    size: A4;
+    margin: 14mm;
+}
+
+/* Force tables to respect page width */
+table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+/* Force wrapping everywhere */
+th, td {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+    font-size: 11px;
+}
+
+/* Prevent ugly page splits */
+tr {
+    page-break-inside: avoid;
+}
+
+/* Long raw output handling */
+pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+/* Reduce heading size for PDF */
+@media print {
+    body {
+        font-size: 11px;
+    }
+
+    h1 { font-size: 26px; }
+    h2 { font-size: 20px; }
+    h3 { font-size: 16px; }
+
+    .header img {
+        height: 60px;
+    }
+}
+
+/* ================= COVER PAGE ================= */
+
+.cover {
+    margin-top: 120px;
+    text-align: center;
+}
+
+.cover-title {
+    font-size: 56px;
+    font-weight: bold;
+    color: #8b0000;
+    margin-bottom: 20px;
+}
+
+.cover-subtitle {
+    font-size: 24px;
+    color: #444;
+    margin-bottom: 40px;
+}
+
+.cover-meta {
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+/* ================= PAGE FOOTER & NUMBERS ================= */
+
+@page {
+    size: A4;
+    margin: 25mm 20mm 25mm 20mm;
+
+    @bottom-left {
+        content: "CONFIDENTIAL – For Authorized Use Only";
+        font-size: 9px;
+        color: #777;
+    }
+
+    @bottom-right {
+        content: "Page " counter(page) " of " counter(pages);
+        font-size: 9px;
+        color: #777;
+    }
+}
+
+.footer {
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 10px;
+    color: #777;
+}
+
+
+</style>
+</head>
+
+<body>
+
+<div class="watermark">RedSentinel</div>
+
+<!-- ================= COVER ================= -->
+<div class="cover">
+    <img src="../assets/redsentinel-logo.png" height="120" alt="RedSentinel Logo">
+
+    <div class="cover-title">
+        Security Assessment Report
+    </div>
+
+    <div class="cover-subtitle">
+        AI-Assisted External Security Review
+    </div>
+
+    <div class="cover-meta">
+        <strong>Target:</strong> karl.com<br>
+        <strong>Generated:</strong> 2026-01-04 03:34 UTC
+    </div>
+</div>
+<p style="margin-top: 40px; font-size: 14px; color: #555;">
+This document contains sensitive security information and is intended
+solely for the authorized recipient. Unauthorized disclosure is prohibited.
+</p>
+
+
+<div class="page-break"></div>
+
+
+<!-- ================= EXECUTIVE SUMMARY ================= -->
+<h2>Executive Summary</h2>
+
+<p>
+A security assessment was conducted to evaluate the external
+exposure and security posture of the target system.
+</p>
+
+<p>
+<strong>Executive Risk Rating:</strong>
+4.25 / 10
+</p>
+
+<div class="summary-box">
+<strong>Finding Summary:</strong><br><br>
+Critical: 0<br>
+High: 0<br>
+Medium: 7<br>
+Low: 0
+</div>
+
+<div class="page-break"></div>
+
+<!-- ================= RISK HEATMAP ================= -->
+<h2>Risk Overview</h2>
+
+<img src="risk_heatmap.png" width="600">
+
+<div class="page-break"></div>
+
+<!-- ================= NORMALIZED FINDINGS ================= -->
+<h2>Technical Findings</h2>
+
+<h3>Medium Severity Findings</h3>
+
+<table>
+<tr>
+    <th width="18%">Finding</th>
+    <th width="8%">Confidence</th>
+    <th width="12%">CVSS</th>
+    <th width="25%">Evidence</th>
+    <th width="22%">Recommendation</th>
+    <th width="15%">Compliance</th>
+</tr>
+
+
+<tr>
+<td class="sev-Medium">General Security Observation</td>
+<td>0.62</td>
+<td>
+6.5
+<div class="cvss-bar">
+    <div class="cvss-fill cvss-Medium"
+         style="width: 65.0%">
+    </div>
+</div>
+</td>
+<td>Host is reachable via ICMP</td>
+<td>Review this finding and apply security best practices appropriate to the affected component.</td>
+<td>
+Not mapped
+</td>
+</tr>
+<tr>
+<td class="sev-Medium">General Security Observation</td>
+<td>0.62</td>
+<td>
+6.5
+<div class="cvss-bar">
+    <div class="cvss-fill cvss-Medium"
+         style="width: 65.0%">
+    </div>
+</div>
+</td>
+<td>Host is reachable via ICMP</td>
+<td>Review this finding and apply security best practices appropriate to the affected component.</td>
+<td>
+Not mapped
+</td>
+</tr>
+<tr>
+<td class="sev-Medium">General Security Observation</td>
+<td>0.62</td>
+<td>
+6.5
+<div class="cvss-bar">
+    <div class="cvss-fill cvss-Medium"
+         style="width: 65.0%">
+    </div>
+</div>
+</td>
+<td>Host is reachable via ICMP</td>
+<td>Review this finding and apply security best practices appropriate to the affected component.</td>
+<td>
+Not mapped
+</td>
+</tr>
+<tr>
+<td class="sev-Medium">Missing MIME Type Protection Header</td>
+<td>0.68</td>
+<td>
+6.5
+<div class="cvss-bar">
+    <div class="cvss-fill cvss-Medium"
+         style="width: 65.0%">
+    </div>
+</div>
+</td>
+<td>[1m[34mhttp://karl.com[0m [301 Moved Permanently] [1mCountry[0m[[0m[22mCANADA[0m][[1m[31mCA[0m], [1mHTTPServer[0m[[1m[36mcloudflare[0m], [1mIP[0m[[0m[22m23.227.38.65[0m], [1mRedirectLocation[0m[[0m[22mhttps://karl.com/[0m], [1mTitle[0m[[1m[33m301 Moved Permanently[0m], [1mUncommonHeaders[0m[[0m[22mreport-to,nel,server-timing,x-content-type-options,x-permitted-cross-domain-policies,x-download-options,cf-ray,alt-svc[0m], [1mX-XSS-Protection[0m[[0m[22m1; mode=block[0m]</td>
+<td>Enable the X-Content-Type-Options header with the value &#39;nosniff&#39; to prevent content-type confusion attacks.</td>
+<td>
+Not mapped
+</td>
+</tr>
+<tr>
+<td class="sev-Medium">Missing Clickjacking Protection Header</td>
+<td>0.68</td>
+<td>
+6.5
+<div class="cvss-bar">
+    <div class="cvss-fill cvss-Medium"
+         style="width: 65.0%">
+    </div>
+</div>
+</td>
+<td>[1m[34mhttps://karl.com[0m [301 Moved Permanently] [1mCookies[0m[[0m[22m_shopify_essential[0m], [1mCountry[0m[[0m[22mCANADA[0m][[1m[31mCA[0m], [1mHTTPServer[0m[[1m[36mcloudflare[0m], [1mHttpOnly[0m[[0m[22m_shopify_essential[0m], [1mIP[0m[[0m[22m23.227.38.65[0m], [1mRedirectLocation[0m[[0m[22mhttps://www.karllagerfeld.com/[0m], [1mStrict-Transport-Security[0m[[0m[22mmax-age=7889238[0m], [1mUncommonHeaders[0m[[0m[22mcf-ray,x-sorting-hat-podid,x-sorting-hat-shopid,x-storefront-renderer-rendered,x-redirect-reason,shopify-complexity-score,content-security-policy,x-shopid,x-shardid,powered-by,server-timing,x-dc,x-request-id,alt-svc,cf-cache-status,report-to,nel,x-content-type-options,x-permitted-cross-domain-policies,x-download-options[0m], [1mX-Frame-Options[0m[[0m[22mDENY[0m], [1mX-XSS-Protection[0m[[0m[22m1; mode=block[0m]</td>
+<td>Implement the X-Frame-Options or Content-Security-Policy frame-ancestors directive to prevent UI redressing attacks.</td>
+<td>
+Not mapped
+</td>
+</tr>
+<tr>
+<td class="sev-Medium">Missing Clickjacking Protection Header</td>
+<td>0.68</td>
+<td>
+6.5
+<div class="cvss-bar">
+    <div class="cvss-fill cvss-Medium"
+         style="width: 65.0%">
+    </div>
+</div>
+</td>
+<td>[1m[34mhttps://karl.com/[0m [301 Moved Permanently] [1mCookies[0m[[0m[22m_shopify_essential[0m], [1mCountry[0m[[0m[22mCANADA[0m][[1m[31mCA[0m], [1mHTTPServer[0m[[1m[36mcloudflare[0m], [1mHttpOnly[0m[[0m[22m_shopify_essential[0m], [1mIP[0m[[0m[22m23.227.38.65[0m], [1mRedirectLocation[0m[[0m[22mhttps://www.karllagerfeld.com/[0m], [1mStrict-Transport-Security[0m[[0m[22mmax-age=7889238[0m], [1mUncommonHeaders[0m[[0m[22mcf-ray,x-sorting-hat-podid,x-sorting-hat-shopid,x-storefront-renderer-rendered,x-redirect-reason,shopify-complexity-score,content-security-policy,x-shopid,x-shardid,alt-svc,powered-by,server-timing,x-dc,x-request-id,cf-cache-status,report-to,nel,x-content-type-options,x-permitted-cross-domain-policies,x-download-options[0m], [1mX-Frame-Options[0m[[0m[22mDENY[0m], [1mX-XSS-Protection[0m[[0m[22m1; mode=block[0m]</td>
+<td>Implement the X-Frame-Options or Content-Security-Policy frame-ancestors directive to prevent UI redressing attacks.</td>
+<td>
+Not mapped
+</td>
+</tr>
+<tr>
+<td class="sev-Medium">Missing Clickjacking Protection Header</td>
+<td>0.68</td>
+<td>
+6.5
+<div class="cvss-bar">
+    <div class="cvss-fill cvss-Medium"
+         style="width: 65.0%">
+    </div>
+</div>
+</td>
+<td>[1m[34mhttps://www.karllagerfeld.com/[0m [200 OK] [1mBootstrap[0m, [1mContent-Language[0m[[0m[22men-NL[0m], [1mCookies[0m[[0m[22m__cf_bm,_shopify_analytics,_shopify_essential,_shopify_s,_shopify_y,cart_currency,localization[0m], [1mCountry[0m[[0m[22mCANADA[0m][[1m[31mCA[0m], [1mHTML5[0m, [1mHTTPServer[0m[[1m[36mcloudflare[0m], [1mHttpOnly[0m[[0m[22m__cf_bm,_shopify_analytics,_shopify_essential[0m], [1mIP[0m[[0m[22m23.227.38.74[0m], [1mOpen-Graph-Protocol[0m[[1m[32mwebsite[0m], [1mScript[0m[[0m[22mapplication/json,application/ld+json,importmap,index,module,text/javascript[0m], [1mStrict-Transport-Security[0m[[0m[22mmax-age=15552000; includeSubDomains; preload[0m], [1mTitle[0m[[1m[33mKARL LAGERFELD Netherlands | Designer Clothing, Fashion &amp;amp; Accessories[0m], [1mUncommonHeaders[0m[[0m[22mcf-ray,cf-cache-status,link,alt-svc,nel,report-to,x-content-type-options,x-download-options,x-permitted-cross-domain-policies,content-security-policy,powered-by,server-timing,shopify-complexity-score,speculation-rules,x-dc,x-request-id,x-shardid,x-shopid,x-sorting-hat-podid,x-sorting-hat-shopid,x-storefront-renderer-rendered[0m], [1mX-Frame-Options[0m[[0m[22mDENY[0m], [1mX-XSS-Protection[0m[[0m[22m1; mode=block[0m]</td>
+<td>Implement the X-Frame-Options or Content-Security-Policy frame-ancestors directive to prevent UI redressing attacks.</td>
+<td>
+Not mapped
+</td>
+</tr>
+</table>
+
+<div class="page-break"></div>
+
+<!-- ================= AI REMEDIATION ================= -->
+<h2>AI-Generated Remediation Roadmap</h2>
+
+<pre>
+Automated remediation guidance could not be generated at this time.
+
+Recommended next steps:
+- Review all Medium and High severity findings
+- Apply vendor security best practices
+- Restrict unnecessary network exposure
+- Implement security headers and TLS hardening
+- Schedule follow-up assessments
+
+AI Error: 404 Client Error: Not Found for url: https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=AIzaSyAtYZZD-Lpo48PXQvngo7KA3H22BJIL4kw
+</pre>
+
+<div class="page-break"></div>
+
+<!-- ================= TOOL OUTPUT APPENDIX ================= -->
+<h2>Tool Output Appendix</h2>
+
+<p>
+This section contains raw findings captured directly from
+security tools during the assessment.
+</p>
+
+<h3>PING</h3>
+
+<table>
+<tr>
+    <th width="12%">Severity</th>
+    <th width="10%">CVSS</th>
+    <th width="10%">Confidence</th>
+    <th width="68%">Raw Output</th>
+</tr>
+
+<tr>
+<td class="sev-MEDIUM">MEDIUM</td>
+<td>6.5</td>
+<td>0.62</td>
+<td><pre>Host is reachable via ICMP</pre></td>
+</tr>
+<tr>
+<td class="sev-MEDIUM">MEDIUM</td>
+<td>6.5</td>
+<td>0.62</td>
+<td><pre>Host is reachable via ICMP</pre></td>
+</tr>
+<tr>
+<td class="sev-MEDIUM">MEDIUM</td>
+<td>6.5</td>
+<td>0.62</td>
+<td><pre>Host is reachable via ICMP</pre></td>
+</tr>
+</table>
+<h3>WHATWEB</h3>
+
+<table>
+<tr>
+    <th width="12%">Severity</th>
+    <th width="10%">CVSS</th>
+    <th width="10%">Confidence</th>
+    <th width="68%">Raw Output</th>
+</tr>
+
+<tr>
+<td class="sev-MEDIUM">MEDIUM</td>
+<td>6.5</td>
+<td>0.68</td>
+<td><pre>[1m[34mhttp://karl.com[0m [301 Moved Permanently] [1mCountry[0m[[0m[22mCANADA[0m][[1m[31mCA[0m], [1mHTTPServer[0m[[1m[36mcloudflare[0m], [1mIP[0m[[0m[22m23.227.38.65[0m], [1mRedirectLocation[0m[[0m[22mhttps://karl.com/[0m], [1mTitle[0m[[1m[33m301 Moved Permanently[0m], [1mUncommonHeaders[0m[[0m[22mreport-to,nel,server-timing,x-content-type-options,x-permitted-cross-domain-policies,x-download-options,cf-ray,alt-svc[0m], [1mX-XSS-Protection[0m[[0m[22m1; mode=block[0m]</pre></td>
+</tr>
+<tr>
+<td class="sev-MEDIUM">MEDIUM</td>
+<td>6.5</td>
+<td>0.68</td>
+<td><pre>[1m[34mhttps://karl.com[0m [301 Moved Permanently] [1mCookies[0m[[0m[22m_shopify_essential[0m], [1mCountry[0m[[0m[22mCANADA[0m][[1m[31mCA[0m], [1mHTTPServer[0m[[1m[36mcloudflare[0m], [1mHttpOnly[0m[[0m[22m_shopify_essential[0m], [1mIP[0m[[0m[22m23.227.38.65[0m], [1mRedirectLocation[0m[[0m[22mhttps://www.karllagerfeld.com/[0m], [1mStrict-Transport-Security[0m[[0m[22mmax-age=7889238[0m], [1mUncommonHeaders[0m[[0m[22mcf-ray,x-sorting-hat-podid,x-sorting-hat-shopid,x-storefront-renderer-rendered,x-redirect-reason,shopify-complexity-score,content-security-policy,x-shopid,x-shardid,powered-by,server-timing,x-dc,x-request-id,alt-svc,cf-cache-status,report-to,nel,x-content-type-options,x-permitted-cross-domain-policies,x-download-options[0m], [1mX-Frame-Options[0m[[0m[22mDENY[0m], [1mX-XSS-Protection[0m[[0m[22m1; mode=block[0m]</pre></td>
+</tr>
+<tr>
+<td class="sev-MEDIUM">MEDIUM</td>
+<td>6.5</td>
+<td>0.68</td>
+<td><pre>[1m[34mhttps://karl.com/[0m [301 Moved Permanently] [1mCookies[0m[[0m[22m_shopify_essential[0m], [1mCountry[0m[[0m[22mCANADA[0m][[1m[31mCA[0m], [1mHTTPServer[0m[[1m[36mcloudflare[0m], [1mHttpOnly[0m[[0m[22m_shopify_essential[0m], [1mIP[0m[[0m[22m23.227.38.65[0m], [1mRedirectLocation[0m[[0m[22mhttps://www.karllagerfeld.com/[0m], [1mStrict-Transport-Security[0m[[0m[22mmax-age=7889238[0m], [1mUncommonHeaders[0m[[0m[22mcf-ray,x-sorting-hat-podid,x-sorting-hat-shopid,x-storefront-renderer-rendered,x-redirect-reason,shopify-complexity-score,content-security-policy,x-shopid,x-shardid,alt-svc,powered-by,server-timing,x-dc,x-request-id,cf-cache-status,report-to,nel,x-content-type-options,x-permitted-cross-domain-policies,x-download-options[0m], [1mX-Frame-Options[0m[[0m[22mDENY[0m], [1mX-XSS-Protection[0m[[0m[22m1; mode=block[0m]</pre></td>
+</tr>
+<tr>
+<td class="sev-MEDIUM">MEDIUM</td>
+<td>6.5</td>
+<td>0.68</td>
+<td><pre>[1m[34mhttps://www.karllagerfeld.com/[0m [200 OK] [1mBootstrap[0m, [1mContent-Language[0m[[0m[22men-NL[0m], [1mCookies[0m[[0m[22m__cf_bm,_shopify_analytics,_shopify_essential,_shopify_s,_shopify_y,cart_currency,localization[0m], [1mCountry[0m[[0m[22mCANADA[0m][[1m[31mCA[0m], [1mHTML5[0m, [1mHTTPServer[0m[[1m[36mcloudflare[0m], [1mHttpOnly[0m[[0m[22m__cf_bm,_shopify_analytics,_shopify_essential[0m], [1mIP[0m[[0m[22m23.227.38.74[0m], [1mOpen-Graph-Protocol[0m[[1m[32mwebsite[0m], [1mScript[0m[[0m[22mapplication/json,application/ld+json,importmap,index,module,text/javascript[0m], [1mStrict-Transport-Security[0m[[0m[22mmax-age=15552000; includeSubDomains; preload[0m], [1mTitle[0m[[1m[33mKARL LAGERFELD Netherlands | Designer Clothing, Fashion &amp;amp; Accessories[0m], [1mUncommonHeaders[0m[[0m[22mcf-ray,cf-cache-status,link,alt-svc,nel,report-to,x-content-type-options,x-download-options,x-permitted-cross-domain-policies,content-security-policy,powered-by,server-timing,shopify-complexity-score,speculation-rules,x-dc,x-request-id,x-shardid,x-shopid,x-sorting-hat-podid,x-sorting-hat-shopid,x-storefront-renderer-rendered[0m], [1mX-Frame-Options[0m[[0m[22mDENY[0m], [1mX-XSS-Protection[0m[[0m[22m1; mode=block[0m]</pre></td>
+</tr>
+</table>
+
+<div class="page-break"></div>
+
+<!-- ================= SIGN OFF ================= -->
+<h2>Consultant Sign-Off</h2>
+
+<p>
+This assessment was performed for defensive purposes only.
+No exploitation or intrusive testing was conducted.
+</p>
+
+<footer>
+<div class="footer">
+    CONFIDENTIAL – For Authorized Use Only
+</div>
+</footer>
+
+
+</body>
+</html>
